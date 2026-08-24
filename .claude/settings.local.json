@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:decorationnepal.com)",
+      "Bash(npx create-next-app@latest *)"
+    ]
+  }
+}
