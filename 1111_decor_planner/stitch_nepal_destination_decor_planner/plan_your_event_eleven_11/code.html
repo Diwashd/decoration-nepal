@@ -1,0 +1,401 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"outline-variant":"#4d4635","surface-container-high":"#2a2a2a","surface-container-low":"#1c1b1b","cream-contrast":"#FFFDF5","tertiary-container":"#b5b3ae","on-primary-container":"#554300","error":"#ffb4ab","primary-container":"#d4af37","background":"#131313","on-surface-variant":"#d0c5af","surface-variant":"#353534","surface-tint":"#e9c349","on-surface":"#e5e2e1","muted-gold":"#A68931","primary":"#f2ca50","secondary-fixed-dim":"#c8c6c5","inverse-on-surface":"#313030","secondary":"#c8c6c5","on-tertiary-fixed-variant":"#474743","tertiary-fixed-dim":"#c9c6c1","surface-dim":"#131313","secondary-fixed":"#e5e2e1","tertiary-fixed":"#e5e2dc","inverse-surface":"#e5e2e1","primary-fixed":"#ffe088","on-tertiary-container":"#464541","on-secondary":"#313030","on-primary-fixed-variant":"#574500","surface-container-lowest":"#0e0e0e","on-tertiary":"#31312d","charcoal-surface":"#242424","outline":"#99907c","surface":"#131313","on-primary-fixed":"#241a00","inverse-primary":"#735c00","champagne-gold":"#E6BE8A","surface-container-highest":"#353534","on-secondary-fixed":"#1c1b1b","tertiary":"#d1cec9","primary-fixed-dim":"#e9c349","on-background":"#e5e2e1","on-error-container":"#ffdad6","error-container":"#93000a","secondary-container":"#474746","on-tertiary-fixed":"#1c1c18","on-secondary-fixed-variant":"#474746","on-primary":"#3c2f00","surface-bright":"#3a3939","on-error":"#690005","surface-container":"#201f1f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"stack-lg":"64px","margin-mobile":"20px","stack-sm":"16px","container-max":"1280px","stack-md":"32px","margin-desktop":"80px","gutter":"24px"},"fontFamily":{"headline-lg":["Playfair Display"],"headline-lg-mobile":["Playfair Display"],"headline-xl":["Playfair Display"],"body-lg":["Hanken Grotesk"],"title-md":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"display-lg":["Playfair Display"]},"fontSize":{"headline-lg":["32px",{"lineHeight":"40px","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","fontWeight":"600"}],"headline-xl":["48px",{"lineHeight":"56px","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"title-md":["20px",{"lineHeight":"28px","letterSpacing":"0.05em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"700"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display-lg":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-surface font-body-md text-on-surface"><main class="w-full"><div class="flex flex-col w-full relative min-h-[800px]">
+<!-- Decorative background elements -->
+<div class="absolute top-0 right-0 w-[40vw] h-[40vw] bg-primary/5 rounded-full blur-[100px] pointer-events-none translate-x-1/4 -translate-y-1/4"></div>
+<div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-champagne-gold/5 rounded-full blur-[80px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
+<div class="container-max mx-auto px-gutter py-margin-desktop relative z-10 flex flex-col lg:flex-row gap-gutter">
+<!-- Main Form Area -->
+<div class="flex-1 flex flex-col gap-stack-lg">
+<!-- Header -->
+<div class="flex flex-col gap-stack-sm max-w-2xl">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest [writing-mode:vertical-rl] absolute -left-12 top-0 hidden lg:block opacity-70">Start Your Journey</span>
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Curate Your Masterpiece</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-lg">Tell us about your vision. Our meticulous planning process begins here, ensuring every detail reflects your unique narrative.</p>
+</div>
+<!-- Progress Indicator -->
+<div class="flex items-center gap-4 w-full">
+<div class="flex-1 flex flex-col gap-2 relative group cursor-pointer" onclick="goToStep(1)">
+<div class="h-0.5 w-full bg-primary relative overflow-hidden">
+<div class="absolute inset-0 bg-primary w-full origin-left transition-transform duration-500" id="progress-1"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">01. Basics</span>
+</div>
+<div class="flex-1 flex flex-col gap-2 relative group cursor-pointer" onclick="goToStep(2)">
+<div class="h-0.5 w-full bg-surface-container-high relative overflow-hidden">
+<div class="absolute inset-0 bg-primary w-0 origin-left transition-all duration-500" id="progress-2"></div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase group-hover:text-primary transition-colors" id="label-2">02. Destination</span>
+</div>
+<div class="flex-1 flex flex-col gap-2 relative group cursor-pointer" onclick="goToStep(3)">
+<div class="h-0.5 w-full bg-surface-container-high relative overflow-hidden">
+<div class="absolute inset-0 bg-primary w-0 origin-left transition-all duration-500" id="progress-3"></div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase group-hover:text-primary transition-colors" id="label-3">03. Theme</span>
+</div>
+<div class="flex-1 flex flex-col gap-2 relative group cursor-pointer" onclick="goToStep(4)">
+<div class="h-0.5 w-full bg-surface-container-high relative overflow-hidden">
+<div class="absolute inset-0 bg-primary w-0 origin-left transition-all duration-500" id="progress-4"></div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase group-hover:text-primary transition-colors" id="label-4">04. Details</span>
+</div>
+</div>
+<!-- Form Container -->
+<div class="relative min-h-[400px] bg-charcoal-surface rounded-xl border border-outline-variant/30 p-gutter overflow-hidden shadow-xl" id="form-container">
+<!-- Step 1: Basics -->
+<div class="absolute inset-0 p-gutter md:p-margin-desktop transition-all duration-500 flex flex-col gap-stack-md opacity-100 z-10 translate-x-0" id="step-1">
+<h2 class="font-headline-lg text-headline-lg text-cream-contrast">Event Fundamentals</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Event Type</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none appearance-none transition-colors cursor-pointer" onchange="updateSummary('type', this.value)">
+<option disabled="" selected="" value="">Select an event type...</option>
+<option value="Wedding">Luxury Wedding</option>
+<option value="Corporate">Corporate Gala</option>
+<option value="Private">Private Celebration</option>
+<option value="Other">Other Bespoke Event</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Expected Guests</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none appearance-none transition-colors cursor-pointer" onchange="updateSummary('guests', this.value)">
+<option disabled="" selected="" value="">Select guest count...</option>
+<option value="Under 50">Intimate (Under 50)</option>
+<option value="50 - 150">Classic (50 - 150)</option>
+<option value="150 - 300">Grand (150 - 300)</option>
+<option value="300+">Spectacle (300+)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Target Date (or approximate timeframe)</label>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none transition-colors" oninput="updateSummary('date', this.value)" placeholder="e.g., Spring 2025 or October 15th" type="text"/>
+</div>
+<div class="mt-auto pt-8 flex justify-end">
+<button class="bg-primary text-on-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-primary-fixed transition-colors flex items-center gap-2" onclick="nextStep()">
+                            Continue to Destination <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Step 2: Destination -->
+<div class="absolute inset-0 p-gutter md:p-margin-desktop transition-all duration-500 flex flex-col gap-stack-md opacity-0 pointer-events-none translate-x-full" id="step-2">
+<h2 class="font-headline-lg text-headline-lg text-cream-contrast">Select Destination</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-4">
+<!-- Dest Card 1 -->
+<div class="relative group cursor-pointer h-64 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors" onclick="selectOption('destination', 'Kathmandu Valley', this)">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 transition-transform duration-700 group-hover:scale-105" data-alt="Aerial view of historic Kathmandu Valley temples at golden hour, misty warm light, luxury travel aesthetic" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2iKwSQII5nbWn76FfnKY-dLQHgL47DkPswyO-_lI254Xt0kGIXip90_fk4_QVY7LL5mq3igIxMdJ2TfPn8MwoBVG6guTYG--bzVw8RNrgj4FLdmo8UWO1MIPg9YxvkwH_snwBaHtjdM5qj9cusZPTLJEaebsmE3bPYAvTcggZmtjv7XA3545Lj1FfFv2kqhOlTW3eOX8wW50LFcAviU_909X8u66Ag-v3-Vd7M1ogyeN1q-1wvTgS')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="font-title-md text-title-md text-cream-contrast mb-1">Kathmandu Valley</h3>
+<p class="font-label-sm text-label-sm text-primary uppercase">Heritage & Grandeur</p>
+</div>
+<div class="absolute top-4 right-4 w-6 h-6 rounded-full border border-primary flex items-center justify-center opacity-0 group-[.selected]:opacity-100 transition-opacity bg-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+</div>
+</div>
+<!-- Dest Card 2 -->
+<div class="relative group cursor-pointer h-64 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors" onclick="selectOption('destination', 'Pokhara Lakeside', this)">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 transition-transform duration-700 group-hover:scale-105" data-alt="Serene view of Phewa Lake in Pokhara with reflection of Machhapuchhre mountain, calm water, luxury resort setting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGMFZ4UQIwx5OoaBNqGnUPZ3wrP-XxmS12O4v0MjF7H7YqHiX0oz9Wv8NReRC0sw2kQt5HACMy_BlgmsjnPYiZ1iCUZ9TOEpQ0K3bKivTp5vqu4kSz1ap4bPlgEi54jx9yqDc-fGKwJWobT1wmgSOBRg-ljrq5HDDQp-M6YrWM5OLXGwLFpyFOKmy-u7d1ADW85lZn2T7zp6EcuwCqtuAfbzM2iMWtNX5_X4lAD_NHUafIHrBlM-P-')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="font-title-md text-title-md text-cream-contrast mb-1">Pokhara Lakeside</h3>
+<p class="font-label-sm text-label-sm text-primary uppercase">Tranquil & Scenic</p>
+</div>
+<div class="absolute top-4 right-4 w-6 h-6 rounded-full border border-primary flex items-center justify-center opacity-0 group-[.selected]:opacity-100 transition-opacity bg-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+</div>
+</div>
+<!-- Dest Card 3 -->
+<div class="relative group cursor-pointer h-64 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors" onclick="selectOption('destination', 'Chitwan Wilderness', this)">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 transition-transform duration-700 group-hover:scale-105" data-alt="Luxury safari lodge overlooking a misty river in Chitwan National Park, warm sunset lighting, high-end ecotourism" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYiZ_wl7FsG6TtRSKicw7q3sPRquayrTy3QSh_AeA88KMGEKoI-ZSHoWcTQFXLauq_I1kSQpEzv_gOXGl8YXJ3hy8JNYLaMJ9s6tfLo05KukKTPdvz0QRIM0uLVLwTLrT_Cw53Dsgfrs_9dXJ6m5QE26FfEcKHBjq6Ya7722an-nAOCKTukMh3fboS7e-018262uyxeX6kz_7qGXDWIjAxfc2j6fzxSXU51ZYx2kCRcAPTHI_WeQi7')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="font-title-md text-title-md text-cream-contrast mb-1">Chitwan Wilderness</h3>
+<p class="font-label-sm text-label-sm text-primary uppercase">Exotic & Exclusive</p>
+</div>
+<div class="absolute top-4 right-4 w-6 h-6 rounded-full border border-primary flex items-center justify-center opacity-0 group-[.selected]:opacity-100 transition-opacity bg-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 flex justify-between">
+<button class="bg-transparent text-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-surface-container transition-colors flex items-center gap-2" onclick="prevStep()">
+<span class="material-symbols-outlined">arrow_back</span> Back
+                        </button>
+<button class="bg-primary text-on-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-primary-fixed transition-colors flex items-center gap-2 opacity-50 cursor-not-allowed" disabled="" id="btn-next-2" onclick="nextStep()">
+                            Continue to Theme <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Step 3: Theme -->
+<div class="absolute inset-0 p-gutter md:p-margin-desktop transition-all duration-500 flex flex-col gap-stack-md opacity-0 pointer-events-none translate-x-full" id="step-3">
+<h2 class="font-headline-lg text-headline-lg text-cream-contrast">Design Aesthetic</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-y-auto pr-2 pb-4">
+<!-- Theme 1 -->
+<div class="relative group cursor-pointer h-48 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors flex items-center justify-center text-center p-4" onclick="selectOption('theme', 'Minimalist Elegance', this)">
+<div class="absolute inset-0 bg-surface-container-lowest group-hover:bg-surface-container-high transition-colors"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary font-light">spa</span>
+<h3 class="font-title-md text-title-md text-cream-contrast">Minimalist</h3>
+<p class="font-label-sm text-label-sm text-secondary hidden md:block">Clean lines, white florals, subtle gold.</p>
+</div>
+</div>
+<!-- Theme 2 -->
+<div class="relative group cursor-pointer h-48 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors flex items-center justify-center text-center p-4" onclick="selectOption('theme', 'Royal Opulence', this)">
+<div class="absolute inset-0 bg-surface-container-lowest group-hover:bg-surface-container-high transition-colors"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary font-light">diamond</span>
+<h3 class="font-title-md text-title-md text-cream-contrast">Opulence</h3>
+<p class="font-label-sm text-label-sm text-secondary hidden md:block">Rich velvets, chandeliers, deep reds.</p>
+</div>
+</div>
+<!-- Theme 3 -->
+<div class="relative group cursor-pointer h-48 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors flex items-center justify-center text-center p-4" onclick="selectOption('theme', 'Botanical Garden', this)">
+<div class="absolute inset-0 bg-surface-container-lowest group-hover:bg-surface-container-high transition-colors"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary font-light">local_florist</span>
+<h3 class="font-title-md text-title-md text-cream-contrast">Botanical</h3>
+<p class="font-label-sm text-label-sm text-secondary hidden md:block">Lush greenery, natural wood, fairy lights.</p>
+</div>
+</div>
+<!-- Theme 4 -->
+<div class="relative group cursor-pointer h-48 rounded-lg overflow-hidden border border-outline-variant hover:border-primary transition-colors flex items-center justify-center text-center p-4" onclick="selectOption('theme', 'Modern Chic', this)">
+<div class="absolute inset-0 bg-surface-container-lowest group-hover:bg-surface-container-high transition-colors"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary font-light">architecture</span>
+<h3 class="font-title-md text-title-md text-cream-contrast">Modern Chic</h3>
+<p class="font-label-sm text-label-sm text-secondary hidden md:block">Neon accents, sleek metal, monochromatic.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 flex justify-between">
+<button class="bg-transparent text-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-surface-container transition-colors flex items-center gap-2" onclick="prevStep()">
+<span class="material-symbols-outlined">arrow_back</span> Back
+                        </button>
+<button class="bg-primary text-on-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-primary-fixed transition-colors flex items-center gap-2 opacity-50 cursor-not-allowed" disabled="" id="btn-next-3" onclick="nextStep()">
+                            Continue to Details <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Step 4: Details -->
+<div class="absolute inset-0 p-gutter md:p-margin-desktop transition-all duration-500 flex flex-col gap-stack-md opacity-0 pointer-events-none translate-x-full" id="step-4">
+<h2 class="font-headline-lg text-headline-lg text-cream-contrast">Final Details</h2>
+<div class="flex flex-col gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Full Name</label>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none transition-colors" placeholder="John Doe" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Email Address</label>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Additional Notes (Optional)</label>
+<textarea class="w-full bg-surface-container-lowest text-on-surface font-body-lg text-body-lg py-4 px-4 border-b border-primary/30 focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Tell us about specific traditions, dietary requirements, or any initial thoughts..." rows="3"></textarea>
+</div>
+</div>
+<div class="mt-auto pt-4 flex justify-between">
+<button class="bg-transparent text-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-surface-container transition-colors flex items-center gap-2" onclick="prevStep()">
+<span class="material-symbols-outlined">arrow_back</span> Back
+                        </button>
+<button class="bg-primary text-on-primary font-title-md text-title-md py-3 px-8 rounded-sm hover:bg-primary-fixed transition-colors flex items-center gap-2" onclick="submitForm(this)">
+                            Request Consultation <span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Summary Sidebar -->
+<div class="w-full lg:w-96 shrink-0 relative lg:sticky lg:top-margin-desktop lg:h-max">
+<div class="bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/50 p-8 rounded-xl shadow-2xl flex flex-col gap-6">
+<h3 class="font-headline-lg text-headline-lg text-cream-contrast border-b border-primary/20 pb-4">Estimate Profile</h3>
+<ul class="flex flex-col gap-4 font-body-md text-body-md text-secondary">
+<li class="flex justify-between items-start gap-4">
+<span class="text-tertiary-fixed-dim font-label-sm uppercase">Type</span>
+<span class="text-right font-medium text-cream-contrast" id="sum-type">--</span>
+</li>
+<li class="flex justify-between items-start gap-4">
+<span class="text-tertiary-fixed-dim font-label-sm uppercase">Guests</span>
+<span class="text-right font-medium text-cream-contrast" id="sum-guests">--</span>
+</li>
+<li class="flex justify-between items-start gap-4">
+<span class="text-tertiary-fixed-dim font-label-sm uppercase">Date</span>
+<span class="text-right font-medium text-cream-contrast" id="sum-date">--</span>
+</li>
+<li class="flex justify-between items-start gap-4">
+<span class="text-tertiary-fixed-dim font-label-sm uppercase">Venue</span>
+<span class="text-right font-medium text-cream-contrast" id="sum-destination">--</span>
+</li>
+<li class="flex justify-between items-start gap-4">
+<span class="text-tertiary-fixed-dim font-label-sm uppercase">Theme</span>
+<span class="text-right font-medium text-cream-contrast" id="sum-theme">--</span>
+</li>
+</ul>
+<div class="mt-4 pt-6 border-t border-primary/20 flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-primary uppercase">Starting Estimate</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-cream-contrast" id="sum-price">$$$</span>
+<span class="font-body-md text-secondary">USD</span>
+</div>
+<p class="font-label-sm text-tertiary-fixed-dim mt-2 leading-relaxed">This is a preliminary baseline. Final quotes are tailored after our initial consultation.</p>
+</div>
+</div>
+<!-- Floating Decorative Line -->
+<div class="absolute -right-8 top-12 bottom-12 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent hidden xl:block"></div>
+</div>
+</div>
+</div>
+<script>
+    let currentStep = 1;
+    const totalSteps = 4;
+    const formData = {
+        type: '',
+        guests: '',
+        date: '',
+        destination: '',
+        theme: ''
+    };
+
+    function updateSummary(key, value) {
+        formData[key] = value;
+        const el = document.getElementById(`sum-${key}`);
+        if(el) {
+            el.textContent = value || '--';
+            el.classList.add('text-primary');
+            setTimeout(() => el.classList.remove('text-primary'), 300);
+        }
+        calculatePrice();
+    }
+
+    function selectOption(category, value, element) {
+        // Remove selected class from siblings
+        const siblings = element.parentElement.children;
+        for(let i=0; i<siblings.length; i++) {
+            siblings[i].classList.remove('selected', 'border-primary');
+        }
+        // Add to clicked
+        element.classList.add('selected', 'border-primary');
+        updateSummary(category, value);
+        
+        // Enable next button for this step
+        if(category === 'destination') {
+            document.getElementById('btn-next-2').disabled = false;
+            document.getElementById('btn-next-2').classList.remove('opacity-50', 'cursor-not-allowed');
+        } else if (category === 'theme') {
+            document.getElementById('btn-next-3').disabled = false;
+            document.getElementById('btn-next-3').classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    function calculatePrice() {
+        let base = 5000;
+        
+        if(formData.type === 'Wedding') base += 10000;
+        if(formData.type === 'Corporate') base += 5000;
+        
+        if(formData.guests === '150 - 300') base += 15000;
+        if(formData.guests === '300+') base += 30000;
+        
+        if(formData.destination === 'Pokhara Lakeside') base += 2000;
+        if(formData.destination === 'Chitwan Wilderness') base += 5000;
+        
+        if(formData.theme === 'Royal Opulence') base += 8000;
+        if(formData.theme === 'Botanical Garden') base += 4000;
+
+        const priceEl = document.getElementById('sum-price');
+        // Simple animation
+        let current = parseInt(priceEl.innerText.replace(/\D/g, '')) || 0;
+        if(current === 0) current = base - 1000;
+        
+        const formatMoney = (n) => n.toLocaleString('en-US');
+        
+        if(formData.type && formData.guests) {
+             priceEl.innerText = formatMoney(base) + '+';
+        }
+    }
+
+    function updateView() {
+        for(let i=1; i<=totalSteps; i++) {
+            const stepEl = document.getElementById(`step-${i}`);
+            const progressEl = document.getElementById(`progress-${i}`);
+            const labelEl = document.getElementById(`label-${i}`);
+
+            if(i === currentStep) {
+                stepEl.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-full', '-translate-x-full');
+                stepEl.classList.add('opacity-100', 'z-10', 'translate-x-0');
+                
+                if(progressEl) progressEl.style.width = '100%';
+                if(labelEl) {
+                    labelEl.classList.remove('text-tertiary-fixed-dim');
+                    labelEl.classList.add('text-primary');
+                }
+            } else if (i < currentStep) {
+                stepEl.classList.remove('opacity-100', 'z-10', 'translate-x-0', 'translate-x-full');
+                stepEl.classList.add('opacity-0', 'pointer-events-none', '-translate-x-full', 'z-0');
+                
+                if(progressEl) progressEl.style.width = '100%';
+                if(labelEl) {
+                    labelEl.classList.remove('text-primary');
+                    labelEl.classList.add('text-tertiary-fixed-dim');
+                }
+            } else {
+                stepEl.classList.remove('opacity-100', 'z-10', 'translate-x-0', '-translate-x-full');
+                stepEl.classList.add('opacity-0', 'pointer-events-none', 'translate-x-full', 'z-0');
+                
+                if(progressEl) progressEl.style.width = '0%';
+                if(labelEl) {
+                    labelEl.classList.remove('text-primary');
+                    labelEl.classList.add('text-tertiary-fixed-dim');
+                }
+            }
+        }
+    }
+
+    function nextStep() {
+        if(currentStep < totalSteps) {
+            currentStep++;
+            updateView();
+        }
+    }
+
+    function prevStep() {
+        if(currentStep > 1) {
+            currentStep--;
+            updateView();
+        }
+    }
+
+    function goToStep(step) {
+        // Only allow clicking back or to currently unlocked steps (simplified for demo)
+        if(step < currentStep) {
+            currentStep = step;
+            updateView();
+        }
+    }
+
+    function submitForm(btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span> Processing...`;
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            document.getElementById('step-4').innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">check</span>
+                    </div>
+                    <h2 class="font-headline-lg text-headline-lg text-cream-contrast">Inquiry Received</h2>
+                    <p class="font-body-lg text-body-lg text-secondary max-w-md">Thank you. A master planner from Eleven 11 will review your details and contact you within 24 hours to begin the consultation.</p>
+                </div>
+            `;
+        }, 1500);
+    }
+</script></main></body></html>

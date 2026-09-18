@@ -1,0 +1,382 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"outline-variant":"#4d4635","surface-container-high":"#2a2a2a","surface-container-low":"#1c1b1b","cream-contrast":"#FFFDF5","tertiary-container":"#b5b3ae","on-primary-container":"#554300","error":"#ffb4ab","primary-container":"#d4af37","background":"#131313","on-surface-variant":"#d0c5af","on-surface-variant":"#d0c5af","surface-variant":"#353534","surface-tint":"#e9c349","on-surface":"#e5e2e1","muted-gold":"#A68931","primary":"#f2ca50","secondary-fixed-dim":"#c8c6c5","inverse-on-surface":"#313030","secondary":"#c8c6c5","on-tertiary-fixed-variant":"#474743","tertiary-fixed-dim":"#c9c6c1","surface-dim":"#131313","secondary-fixed":"#e5e2e1","tertiary-fixed":"#e5e2dc","inverse-surface":"#e5e2e1","primary-fixed":"#ffe088","on-tertiary-container":"#464541","on-secondary":"#313030","on-primary-fixed-variant":"#574500","surface-container-lowest":"#0e0e0e","on-tertiary":"#31312d","charcoal-surface":"#242424","outline":"#99907c","surface":"#131313","on-primary-fixed":"#241a00","inverse-primary":"#735c00","champagne-gold":"#E6BE8A","surface-container-highest":"#353534","on-secondary-fixed":"#1c1b1b","tertiary":"#d1cec9","primary-fixed-dim":"#e9c349","on-background":"#e5e2e1","on-error-container":"#ffdad6","error-container":"#93000a","secondary-container":"#474746","on-tertiary-fixed":"#1c1c18","on-secondary-fixed-variant":"#474746","on-primary":"#3c2f00","surface-bright":"#3a3939","on-error":"#690005","surface-container":"#201f1f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"stack-lg":"64px","margin-mobile":"20px","stack-sm":"16px","container-max":"1280px","stack-md":"32px","margin-desktop":"80px","gutter":"24px"},"fontFamily":{"headline-lg":["Playfair Display"],"headline-lg-mobile":["Playfair Display"],"headline-xl":["Playfair Display"],"body-lg":["Hanken Grotesk"],"title-md":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"display-lg":["Playfair Display"]},"fontSize":{"headline-lg":["32px",{"lineHeight":"40px","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","fontWeight":"600"}],"headline-xl":["48px",{"lineHeight":"56px","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"title-md":["20px",{"lineHeight":"28px","letterSpacing":"0.05em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"700"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display-lg":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-xl border-b border-outline-variant/30"><div class="h-20 max-w-[1280px] mx-auto px-6 lg:px-margin-desktop flex items-center justify-between gap-8"><div class="flex items-center gap-4"><img alt="Eleven 11 Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UVzetBU78hLOPDr78i3wa0e5Ky1FhJLufyzINB8Di4N0NdBomRjYQCluCfexl6hZ2YqRq32rZQVrvBYQ8QlWxkFUX7nUxto9GHtqLCOVx_Ops2FeBrnOQ6Ropx8ZaTA-AYejbXF_f9tKWnWWF7qc24hmTSjcL722fAorr7KzOb-F9xKiLh0SZVHiPkgSceybeyNGir6qFwS0qLwLVtUPNiBpF0dsAIOapngx-cIvVoJPOPGeLQXNczig"/><span class="font-headline-lg text-primary hidden lg:block tracking-widest uppercase">Eleven 11</span></div><nav class="hidden lg:flex items-center gap-8" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors uppercase text-primary font-bold" data-path="destinations" href="#">Destinations</a><a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors uppercase" data-path="services" href="#">Services</a><a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors uppercase" data-path="gallery" href="#">Gallery</a><a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors uppercase" data-path="about-us" href="#">About Us</a><a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors uppercase" data-path="contact" href="#">Contact</a></nav><div class="flex items-center gap-6"><button class="hidden sm:block bg-primary text-on-primary font-label-sm px-6 py-3 rounded-full hover:bg-primary-fixed-dim transition-all shadow-lg uppercase tracking-wider">Book Now</button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="pt-20 bg-surface min-h-screen"><div class="flex flex-col w-full bg-background text-on-background relative overflow-hidden">
+<div class="absolute top-0 right-0 w-3/4 h-[800px] bg-gradient-radial from-primary/10 to-transparent blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-1/2 h-[600px] bg-gradient-radial from-champagne-gold/5 to-transparent blur-3xl pointer-events-none"></div>
+<section class="relative min-h-[90vh] flex items-center justify-center -mt-20 pt-20 px-6 lg:px-margin-desktop overflow-hidden">
+<div class="absolute inset-0 z-0" data-alt="A breathtaking, wide-angle shot of a luxurious wedding setup in a grand Nepali palace courtyard at twilight. Deep black night sky contrasts with warm, glowing gold fairy lights draped over ancient architecture. Tables are set with fine crystal and gold chargers. The mood is opulent, exclusive, and magical. Photographed on medium format, highly detailed, cinematic lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAD7mPCb1hYUN9bXHaMlFuL39yVLR-caNZqd8JFmj99fkshd-ba9EgjRUIXAOzRdntLA_RdL8LVZGXyaD7D5SLTlyXfVTp6FImraIFKPrFAymMfSQ-aqNlQ0XTXMgzQtvvmJ0LJMRKr6EzqCVdvWJGt_aLaKZdahYiAfiflL8cwvnNjZrGInFVcAuA_hA_-DOt4cotPTtq_-pQIZ7ihE3Cfvc0oj5nVxXLlosEmA_G9dj2Baxw3QPh-')">
+<div class="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background"></div>
+</div>
+<div class="relative z-10 w-full max-w-container-max mx-auto flex flex-col items-center text-center gap-stack-md mt-20">
+<div class="inline-flex items-center gap-3 bg-surface-container-low/80 backdrop-blur-md px-6 py-2 rounded-full border-[0.5px] border-primary/30 shadow-2xl">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase">Bespoke Events in Nepal</span>
+</div>
+<h1 class="font-display-lg text-cream-contrast max-w-4xl tracking-tight leading-tight mix-blend-screen drop-shadow-2xl">
+                Elevate Events with <br class="hidden md:block"/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-champagne-gold to-muted-gold italic pr-4">Extraordinary</span> Experiences
+            </h1>
+<p class="font-body-lg text-on-surface-variant max-w-2xl font-light">
+                Crafting turnkey event masterpieces with meticulous attention to luxury, exclusivity, and professional perfection.
+            </p>
+<div class="w-full max-w-3xl mt-stack-md bg-surface-container-high/90 backdrop-blur-xl p-4 rounded-xl border-[0.5px] border-outline-variant/50 shadow-2xl flex flex-col md:flex-row gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+<div class="flex-1 flex flex-col bg-surface-container-lowest rounded-lg p-4 border-[0.5px] border-outline-variant/30 relative">
+<label class="font-label-sm text-primary uppercase mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">celebration</span> Event Type
+                    </label>
+<select class="bg-transparent text-on-surface font-title-md outline-none cursor-pointer appearance-none">
+<option class="bg-surface-container-high">Select Event</option>
+<option class="bg-surface-container-high">Wedding</option>
+<option class="bg-surface-container-high">Birthday</option>
+<option class="bg-surface-container-high">Anniversary</option>
+<option class="bg-surface-container-high">Pasni</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<div class="w-px bg-outline-variant/30 hidden md:block"></div>
+<div class="flex-1 flex flex-col bg-surface-container-lowest rounded-lg p-4 border-[0.5px] border-outline-variant/30 relative">
+<label class="font-label-sm text-primary uppercase mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Location
+                    </label>
+<select class="bg-transparent text-on-surface font-title-md outline-none cursor-pointer appearance-none">
+<option class="bg-surface-container-high">Select Destination</option>
+<option class="bg-surface-container-high">Kathmandu</option>
+<option class="bg-surface-container-high">Pokhara</option>
+<option class="bg-surface-container-high">Chitwan</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<button class="bg-primary text-on-primary font-title-md px-8 py-4 rounded-lg hover:bg-primary-fixed transition-colors flex items-center justify-center gap-2 group/btn">
+                    Plan Now
+                    <span class="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<section class="py-stack-lg px-6 lg:px-margin-desktop bg-surface relative z-20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-stack-md gap-8">
+<div class="max-w-2xl">
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase block mb-4 flex items-center gap-4">
+<span class="w-8 h-px bg-primary"></span> Curated Excellence
+                    </span>
+<h2 class="font-headline-xl text-cream-contrast">Our Specializations</h2>
+</div>
+<p class="font-body-md text-on-surface-variant max-w-md pb-2 border-b-[0.5px] border-primary/30">
+                    From intimate gatherings to grand celebrations, we transform your vision into an unforgettable reality across Nepal.
+                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 group/grid">
+<div class="group/card relative h-[500px] rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-500 ease-out z-10 hover:z-20 border-[0.5px] border-outline-variant/20">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/card:scale-110" data-alt="A luxurious Hindu wedding mandap decorated with deep red roses, cascading marigolds, and gold structural accents. The setting is dramatic, with dark shadows contrasting against bright, focused spotlights on the floral arrangements. Cinematic composition, shallow depth of field." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRlh8XFa3IcdqYHHd_ddN3zfjK8rfQlU5Gbd9obUyjXJFiZ1emMUCOYhN2UFgP5gpqUFNoE3MLFzThZ2JH3XdNTq1thbBr8vbOOYEDMn36z4JxQOoMHR1BAUY0MEuxTHdhl4a4DnNMQmd9h8gicR-CnD9zi6aM8WSz5udyvlpDthuBwoY40gKOe8F4iauFCd8qkcuIFkYbBsstcu8X0CpcUUVicaM36u-4oO9ZvXFA58S1M5xLR0Vg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="translate-y-8 group-hover/card:translate-y-0 transition-transform duration-500">
+<h3 class="font-headline-lg text-cream-contrast mb-2">Weddings</h3>
+<p class="font-body-md text-on-surface-variant opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100 mb-4 line-clamp-2">
+                                We design weddings that are a true reflection of your unique love story, blending tradition with modern luxury.
+                            </p>
+<span class="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wider opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                                View Gallery <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</span>
+</div>
+</div>
+</div>
+<div class="group/card relative h-[500px] rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-500 ease-out z-10 hover:z-20 border-[0.5px] border-outline-variant/20 md:translate-y-8">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/card:scale-110" data-alt="An elegant 50th birthday celebration setup in a high-end Kathmandu banquet hall. Dark moody atmosphere with black velvet table cloths, gold rimmed plates, tall crystal centerpieces, and warm amber lighting. A custom gold '50' sign is subtly visible in the background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZT_Ouk54rUAjVMOSmVV_ULdi4KQTiqwECk_V2tcx-XEnp-AyWIpmpabPx0Bs6Fhf-IgZEPdoXU2tvQdYWWdSSAQYdtOn3LFCeD26scVeC_RMklJgYHHjJ_vybRfFWzTIPBxx8FaUQsFmSHdgGu_g41Y5tYl-FZg-TAmjYAGmwobUFOLDOsasg-8gtGx4LNf49m2Qf0asPicxCDNnnmuGNpSu1oHP8D4LJRml3YgzKa5yUxvEJx1zj')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="translate-y-8 group-hover/card:translate-y-0 transition-transform duration-500">
+<h3 class="font-headline-lg text-cream-contrast mb-2">Birthdays</h3>
+<p class="font-body-md text-on-surface-variant opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100 mb-4 line-clamp-2">
+                                Milestone celebrations crafted with precision, offering sophisticated fun and memorable moments.
+                            </p>
+<span class="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wider opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                                Explore <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</span>
+</div>
+</div>
+</div>
+<div class="group/card relative h-[500px] rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-500 ease-out z-10 hover:z-20 border-[0.5px] border-outline-variant/20">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/card:scale-110" data-alt="A romantic silver anniversary dinner setup under a vast banyan tree. Countless small hanging lanterns provide warm illumination. A long table dressed in charcoal linen with silver and white floral runners. The scene is intimate, quiet, and profoundly elegant." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD-ttqClFt4XWdYW1U19G6Kq-J2g7g4w22Yksfvx30E_Rf3FcKKQDsTK12ST60MZsgt12HcWYMOLat4HcvJ9mUGhiVzZPsvbCb_bDeiDpPGQuRpbKgbxdTQnItmrqE2FKW5t_LhHyC9TQYVhy3cjMrVgOsFUNgX1V2fEIE0HOHoP6ZPtpxbI48KVdgZciVB7u2kR9Ci-BzMtqPl4VzLXcyD5IWNERxyV6dNhOiRxTFClGm5nR1F_TPc')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="translate-y-8 group-hover/card:translate-y-0 transition-transform duration-500">
+<h3 class="font-headline-lg text-cream-contrast mb-2">Anniversaries</h3>
+<p class="font-body-md text-on-surface-variant opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100 mb-4 line-clamp-2">
+                                Renew your vows or celebrate years of togetherness in settings that speak volumes of your enduring bond.
+                            </p>
+<span class="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wider opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                                Discover <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</span>
+</div>
+</div>
+</div>
+<div class="group/card relative h-[500px] rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform duration-500 ease-out z-10 hover:z-20 border-[0.5px] border-outline-variant/20 md:translate-y-8">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover/card:scale-110" data-alt="A beautifully decorated traditional Pasni (rice-feeding) ceremony space. Subtle nods to Nepali culture with gold-threaded fabrics, marigold garlands, and a highly polished silver bowl and spoon setup on a low, ornate table. Lighting is soft, warm, and inviting against a dark background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6tQS-vUJXUcE7-WFsm_ier1Dz0tCPaFXIJGvf3R3U2xi-NfRnjXAN2YVP7D_URQog3rRL3nZH45f9_DIpCWcek6ngLFIes1u4nkoo0geOJ3dDqD2LZ8pYD1px3gWsbvUU_R53BlQ-7z52WEeLL_oMRwZPJyvPoqJyEvZoOGP1Y4L5evP80MAwuICGuKilu61_fOjbfK3PNcSyrrqeE0eAbE5eupGdIU5ig4FkxsDmBGCNkPi5sQH9')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/40 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="translate-y-8 group-hover/card:translate-y-0 transition-transform duration-500">
+<h3 class="font-headline-lg text-cream-contrast mb-2">Pasni</h3>
+<p class="font-body-md text-on-surface-variant opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100 mb-4 line-clamp-2">
+                                Honor tradition with beautifully styled rice-feeding ceremonies, blending cultural richness with modern aesthetics.
+                            </p>
+<span class="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wider opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                                See Details <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-stack-lg px-6 lg:px-margin-desktop bg-surface-container-lowest relative overflow-hidden">
+<div class="absolute top-1/2 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-4 flex flex-col items-start">
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase mb-4 flex items-center gap-4">
+<span class="w-8 h-px bg-primary"></span> Breathtaking Locales
+                    </span>
+<h2 class="font-headline-xl text-cream-contrast mb-6">Featured Destinations</h2>
+<p class="font-body-lg text-on-surface-variant mb-8">
+                        We curate exclusive venues across Nepal's most stunning landscapes, ensuring your event is framed by unparalleled natural and architectural beauty.
+                    </p>
+<div class="flex flex-col gap-4 w-full border-l-[0.5px] border-outline-variant/30 pl-6 mb-8 relative">
+<div class="absolute top-0 -left-[2px] w-1 h-12 bg-primary transition-all duration-500" id="destination-indicator"></div>
+<button class="text-left group dest-btn active" data-index="0">
+<h4 class="font-title-md text-cream-contrast group-hover:text-primary transition-colors flex items-center justify-between">
+                                Kathmandu Valley <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all text-primary">chevron_right</span>
+</h4>
+<p class="font-body-md text-on-surface-variant/60 group-hover:text-on-surface-variant transition-colors">Heritage Palaces & Luxury Hotels</p>
+</button>
+<button class="text-left group dest-btn" data-index="1">
+<h4 class="font-title-md text-on-surface-variant group-hover:text-primary transition-colors flex items-center justify-between">
+                                Pokhara <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all text-primary">chevron_right</span>
+</h4>
+<p class="font-body-md text-on-surface-variant/60 group-hover:text-on-surface-variant transition-colors">Lakeside Resorts & Mountain Views</p>
+</button>
+<button class="text-left group dest-btn" data-index="2">
+<h4 class="font-title-md text-on-surface-variant group-hover:text-primary transition-colors flex items-center justify-between">
+                                Chitwan <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all text-primary">chevron_right</span>
+</h4>
+<p class="font-body-md text-on-surface-variant/60 group-hover:text-on-surface-variant transition-colors">Jungle Safaris & Nature Retreats</p>
+</button>
+</div>
+<a class="font-label-sm text-primary uppercase tracking-widest hover:text-champagne-gold transition-colors inline-flex items-center gap-2 border-b border-primary/30 pb-1 hover:border-primary" href="#">
+                        View All Locations
+                    </a>
+</div>
+<div class="lg:col-span-8 relative h-[600px] w-full rounded-2xl overflow-hidden shadow-2xl border-[0.5px] border-outline-variant/40 group">
+<div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-100" data-alt="A lavish outdoor wedding setup in a historic Kathmandu courtyard. Ancient red brick temples in the background contrast with modern luxury seating, sparkling crystal chandeliers hung from trees, and deep charcoal and gold accents. Evening time, magical glow." id="dest-img-0" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAVnsZdxbPrruY8zwJCEg2GlwzVe0P-ScFRffDe8NxCRXMUZJBfePQAcmrhe-wYzKMMqeOS27t6nHylOSCm478dQvf8lgpWcXKV5AkS7iha_CkVdSTraY020IrmOorm7mILjQkjHlnTfv48ljtjWWXhOZlpT6Rv9BzqXxs35lA3QWe9JWwYBYsg0inX9G0tyFWJ_PRLk-xDdlP__A2bBAC4H0WqeNe0K77fVCy9x8KcA7ZAtVzYV0zt')"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-0" data-alt="A serene luxury event setup by Phewa Lake in Pokhara. The majestic Machhapuchhre mountain is reflected in the water. Elegant white tents with gold draping, minimalist floral designs, and soft dusk lighting create a tranquil, high-end atmosphere." id="dest-img-1" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhevQEWVVas5AP2f8sbSe6hZcDxxcmC6wb1x5-ECIMxGWXmo6Xb_wFnLR_evrPFvhEiu70oe4vLrimgzZUZTOlUbi67Xrj8kgtGi0u3eWpc9GcsvCjOIe4QU7VfzUBMGFcOlgONiUM5rb6N47ODrMErZ10xWfFo6O7wrKly9-Rk9ApFOhLgklcfQLY7dU3NWdm2lhPceJxRnz687_BD2lQ-0uNWFdqFTiOkiLQf7fs9TDpIgDwYZFy')"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-0" data-alt="An exclusive jungle resort event in Chitwan. A sophisticated dining setup under a massive canopy of ancient trees. Lanterns hanging from branches, dark wood furniture, rich green tropical foliage, and subtle gold table settings. Luxurious rustic aesthetic." id="dest-img-2" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRyc0U3BUPBywYHaoYZ_9jhaMssvSH6ChK-D85Urv6dPy4PY_PLq_6u87KD_J8wy25eZvXhfwe_FfkLrEyFl7NDr2MnCNvzrlzr5h82AmGxaO5StNXRdfVixtVLyJAI3fDWEDAsMLaMYkSp3nFGOmlSOUeZ6rJ0ErKZg4JclhezPJaRHGOZ5wX-WQuaxZjDWqvTln_u_26JV17V9BjYZ2FNH3s5GGKMnqJlFTuhStSZiMF41AAHmBF')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div>
+<div class="absolute top-6 right-6 px-4 py-1 border-[0.5px] border-primary rounded-full bg-surface-container-lowest/50 backdrop-blur-md">
+<span class="font-label-sm text-primary uppercase tracking-widest" id="dest-badge">KATHMANDU</span>
+</div>
+<div class="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+<div>
+<h3 class="font-headline-xl text-cream-contrast mb-2 drop-shadow-lg transition-all duration-500" id="dest-title">The Royal Courtyard</h3>
+<p class="font-body-lg text-on-surface-variant max-w-lg transition-all duration-500" id="dest-desc">Experience the grandeur of ancient architecture blended with bespoke modern luxury.</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-surface-container-high/80 backdrop-blur border-[0.5px] border-outline-variant hover:border-primary hover:bg-primary group/btn flex items-center justify-center transition-all shadow-lg">
+<span class="material-symbols-outlined text-on-surface group-hover/btn:text-on-primary transition-colors">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-stack-lg px-6 lg:px-margin-desktop bg-surface relative">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-16 flex flex-col items-center">
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase mb-4 flex items-center gap-4">
+<span class="w-8 h-px bg-primary"></span> Comprehensive Care <span class="w-8 h-px bg-primary"></span>
+</span>
+<h2 class="font-headline-xl text-cream-contrast">What We Offer</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+<div class="bg-surface-container-high p-8 rounded-xl border-[0.5px] border-outline-variant/20 hover:border-primary/50 transition-colors group flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border-[0.5px] border-outline-variant/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">auto_awesome</span>
+</div>
+<h3 class="font-title-md text-cream-contrast mb-3">Decoration</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Bespoke thematic designs tailored to your unique style and vision.</p>
+</div>
+<div class="bg-surface-container-high p-8 rounded-xl border-[0.5px] border-outline-variant/20 hover:border-primary/50 transition-colors group flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border-[0.5px] border-outline-variant/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">location_city</span>
+</div>
+<h3 class="font-title-md text-cream-contrast mb-3">Venue Finding</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Scouting the perfect, exclusive locations for your grand celebration.</p>
+</div>
+<div class="bg-surface-container-high p-8 rounded-xl border-[0.5px] border-outline-variant/20 hover:border-primary/50 transition-colors group flex flex-col items-center text-center md:col-span-3 lg:col-span-1">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border-[0.5px] border-outline-variant/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">photo_camera</span>
+</div>
+<h3 class="font-title-md text-cream-contrast mb-3">Photo & Video</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Capturing timeless moments with cinematic precision and artistry.</p>
+</div>
+<div class="bg-surface-container-high p-8 rounded-xl border-[0.5px] border-outline-variant/20 hover:border-primary/50 transition-colors group flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border-[0.5px] border-outline-variant/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">face_retouching_natural</span>
+</div>
+<h3 class="font-title-md text-cream-contrast mb-3">Makeup</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Professional styling to ensure you look radiant on your special day.</p>
+</div>
+<div class="bg-surface-container-high p-8 rounded-xl border-[0.5px] border-outline-variant/20 hover:border-primary/50 transition-colors group flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest border-[0.5px] border-outline-variant/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">music_note</span>
+</div>
+<h3 class="font-title-md text-cream-contrast mb-3">Band Baja</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Traditional and modern musical ensembles to set the perfect mood.</p>
+</div>
+</div>
+<div class="mt-12 flex justify-center">
+<button class="bg-transparent text-primary font-label-sm uppercase tracking-widest px-8 py-4 rounded-full border border-primary hover:bg-primary hover:text-on-primary transition-all flex items-center gap-2">
+                    Explore All Services <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<section class="py-stack-lg px-6 lg:px-margin-desktop bg-surface-container-low relative overflow-hidden">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#d4af37 1px, transparent 1px); background-size: 32px 32px;"></div>
+<div class="max-w-container-max mx-auto relative z-10">
+<div class="flex flex-col items-center mb-12">
+<span class="material-symbols-outlined text-primary text-4xl mb-4 opacity-50">format_quote</span>
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase mb-2">Voices of Joy</span>
+<h2 class="font-headline-xl text-cream-contrast text-center">Client Experiences</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-surface p-8 rounded-xl border-[0.5px] border-outline-variant/30 shadow-lg relative">
+<div class="flex items-center gap-1 mb-6">
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+</div>
+<p class="font-headline-lg text-cream-contrast italic mb-8 leading-snug">
+                        "The level of detail was simply astounding. They took our vision and elevated it beyond anything we could have imagined for our Kathmandu wedding."
+                    </p>
+<div class="w-12 h-px bg-primary/50 mb-4"></div>
+<p class="font-title-md text-on-surface">Aarav & Priya</p>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Wedding Client</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border-[0.5px] border-outline-variant/30 shadow-lg relative lg:-translate-y-8">
+<div class="flex items-center gap-1 mb-6">
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+</div>
+<p class="font-headline-lg text-cream-contrast italic mb-8 leading-snug">
+                        "Professional, creative, and incredibly reliable. Our corporate gala in Pokhara went flawlessly thanks to the Eleven 11 team."
+                    </p>
+<div class="w-12 h-px bg-primary/50 mb-4"></div>
+<p class="font-title-md text-on-surface">Sushant G.</p>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Corporate Event</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border-[0.5px] border-outline-variant/30 shadow-lg relative">
+<div class="flex items-center gap-1 mb-6">
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+<span 1;'="" class="material-symbols-outlined text-primary text-[18px] style='font-variation-settings: \" fill\"="">star</span>
+</div>
+<p class="font-headline-lg text-cream-contrast italic mb-8 leading-snug">
+                        "For our parents' 50th anniversary, we wanted absolute perfection. They delivered a breathtaking aesthetic with zero stress for us."
+                    </p>
+<div class="w-12 h-px bg-primary/50 mb-4"></div>
+<p class="font-title-md text-on-surface">The Malla Family</p>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Anniversary Celebration</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-stack-lg px-6 lg:px-margin-desktop bg-background border-t-[0.5px] border-outline-variant/20">
+<div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+<h2 class="font-display-lg text-cream-contrast mb-6">Ready to Create <br/><span class="text-primary italic">Magic?</span></h2>
+<p class="font-body-lg text-on-surface-variant mb-10 max-w-2xl">
+                Begin the journey to your extraordinary event. Schedule a private consultation with our master planners today.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary font-title-md px-8 py-4 rounded-lg hover:bg-primary-fixed transition-colors shadow-lg shadow-primary/20">
+                    Book Consultation
+                </button>
+<button class="bg-transparent text-on-surface font-title-md px-8 py-4 rounded-lg border-[0.5px] border-outline-variant hover:border-primary hover:text-primary transition-colors">
+                    View Portfolio
+                </button>
+</div>
+</div>
+</section>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const destBtns = document.querySelectorAll('.dest-btn');
+        const images = ['dest-img-0', 'dest-img-1', 'dest-img-2'];
+        const indicator = document.getElementById('destination-indicator');
+        const titleEl = document.getElementById('dest-title');
+        const descEl = document.getElementById('dest-desc');
+        const badgeEl = document.getElementById('dest-badge');
+
+        const destData = [
+            {
+                title: "The Royal Courtyard",
+                desc: "Experience the grandeur of ancient architecture blended with bespoke modern luxury.",
+                badge: "KATHMANDU"
+            },
+            {
+                title: "Lakeside Serenity",
+                desc: "Tranquil waters and mountain vistas provide a breathtaking backdrop for intimate gatherings.",
+                badge: "POKHARA"
+            },
+            {
+                title: "Wilderness Elegance",
+                desc: "Immersive luxury in the heart of nature, offering a truly unique and exotic celebration.",
+                badge: "CHITWAN"
+            }
+        ];
+
+        destBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                // Update indicator position
+                indicator.style.transform = `translateY(${index * (48 + 16)}px)`; // height + gap roughly
+
+                // Update text colors
+                destBtns.forEach(b => {
+                    b.querySelector('h4').classList.remove('text-cream-contrast');
+                    b.querySelector('h4').classList.add('text-on-surface-variant');
+                });
+                btn.querySelector('h4').classList.remove('text-on-surface-variant');
+                btn.querySelector('h4').classList.add('text-cream-contrast');
+
+                // Update Images
+                images.forEach((imgId, i) => {
+                    const el = document.getElementById(imgId);
+                    if (i === index) {
+                        el.classList.remove('opacity-0');
+                        el.classList.add('opacity-100');
+                    } else {
+                        el.classList.remove('opacity-100');
+                        el.classList.add('opacity-0');
+                    }
+                });
+
+                // Update Content with subtle animation
+                titleEl.style.opacity = '0';
+                descEl.style.opacity = '0';
+                setTimeout(() => {
+                    titleEl.textContent = destData[index].title;
+                    descEl.textContent = destData[index].desc;
+                    badgeEl.textContent = destData[index].badge;
+                    titleEl.style.opacity = '1';
+                    descEl.style.opacity = '1';
+                }, 300);
+            });
+        });
+    });
+</script></main><footer class="w-full bg-surface-container-low pt-20 pb-12 border-t border-outline-variant/20"><div class="max-w-[1280px] mx-auto px-6 lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-12 mb-16"><div class="col-span-1 lg:col-span-1"><img alt="Eleven 11 Logo" class="h-12 w-auto mb-6 opacity-80" src="https://lh3.googleusercontent.com/aida/AEtjO1UVzetBU78hLOPDr78i3wa0e5Ky1FhJLufyzINB8Di4N0NdBomRjYQCluCfexl6hZ2YqRq32rZQVrvBYQ8QlWxkFUX7nUxto9GHtqLCOVx_Ops2FeBrnOQ6Ropx8ZaTA-AYejbXF_f9tKWnWWF7qc24hmTSjcL722fAorr7KzOb-F9xKiLh0SZVHiPkgSceybeyNGir6qFwS0qLwLVtUPNiBpF0dsAIOapngx-cIvVoJPOPGeLQXNczig"/><p class="text-on-surface-variant font-body-md leading-relaxed">Crafting turnkey event masterpieces in Nepal with meticulous attention to luxury and exclusivity.</p></div><div><h4 class="font-title-md text-primary mb-6">Quick Links</h4><ul class="space-y-4"><li class="font-label-sm text-on-surface-variant hover:text-primary cursor-pointer transition-colors uppercase">Wedding</li><li class="font-label-sm text-on-surface-variant hover:text-primary cursor-pointer transition-colors uppercase">Anniversary</li><li class="font-label-sm text-on-surface-variant hover:text-primary cursor-pointer transition-colors uppercase">Birthday</li><li class="font-label-sm text-on-surface-variant hover:text-primary cursor-pointer transition-colors uppercase">Pasni</li></ul></div><div><h4 class="font-title-md text-primary mb-6">Connect</h4><p class="text-on-surface-variant font-body-md mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">call</span> +977-9847411305</p><div class="flex gap-4"><span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">share</span><span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">public</span><span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">camera</span></div></div><div><h4 class="font-title-md text-primary mb-6">Legal</h4><p class="text-on-surface-variant font-body-md">Privacy Policy<br/>Terms of Service</p></div></div><div class="border-t border-outline-variant/20 pt-8 text-center text-on-surface-variant font-label-sm uppercase tracking-widest">© 2024 Eleven 11 Decoration Nepal. All Excellence Reserved.</div></div></footer></body></html>
