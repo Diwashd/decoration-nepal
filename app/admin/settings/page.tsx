@@ -1,7 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { Settings, Save, Building, Phone, Mail, Globe, Image, Shield, Bell } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Settings, Save, Building, Phone, Globe, Image as ImageIcon, Shield, Bell } from 'lucide-react';
+import DragDropImage from '@/components/ui/DragDropImage';
+import type { HeroSlide } from '@/lib/settings';
+
+const brandingDefaults = {
+  logo: '/logo.png',
+  favicon: '/favicon.ico',
+  ogImage: '/og-image.jpg',
+  logoSizePercent: 100,
+};
+const defaultHeroSlides: HeroSlide[] = [{
+  id: 'default-hero',
+  image: '',
+  eyebrow: 'Bespoke Events in Nepal',
+  heading: 'Elevate Events with',
+  highlight: 'Extraordinary Experiences',
+  description: 'Crafting turnkey event masterpieces with meticulous attention to luxury, exclusivity, and professional perfection.',
+}];
 
 export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
@@ -14,9 +31,7 @@ export default function SettingsPage() {
     facebook: 'https://facebook.com/11byNK',
     instagram: 'https://instagram.com/11byNK',
     whatsapp: '9779847411305',
-    logo: '/logo.png',
-    favicon: '/favicon.ico',
-    ogImage: '/og-image.jpg',
+    ...brandingDefaults,
     primaryColor: '#f2ca50',
     currency: 'NPR',
     timezone: 'Asia/Kathmandu',
@@ -28,14 +43,59 @@ export default function SettingsPage() {
     emailNotifications: true,
     smsNotifications: false,
   });
+  const [isLoadingBranding, setIsLoadingBranding] = useState(true);
+  const [saveError, setSaveError] = useState('');
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(defaultHeroSlides);
+
+  useEffect(() => {
+    const loadBranding = async () => {
+      try {
+        const response = await fetch('/api/admin/settings');
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Failed to load branding settings');
+        }
+        setSettings((current) => ({ ...current, ...result.branding }));
+        if (Array.isArray(result.heroSlides)) setHeroSlides(result.heroSlides);
+      } catch (error) {
+        setSaveError(error instanceof Error ? error.message : 'Failed to load branding settings');
+      } finally {
+        setIsLoadingBranding(false);
+      }
+    };
+
+    void loadBranding();
+  }, []);
 
   const updateSetting = (key: string, value: string | boolean | number) => {
     setSettings({ ...settings, [key]: value });
   };
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleSave = async () => {
+    setSaveError('');
+    try {
+      const response = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          logo: settings.logo,
+          favicon: settings.favicon,
+          ogImage: settings.ogImage,
+          logoSizePercent: settings.logoSizePercent,
+          heroSlides,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to save settings');
+      }
+      setSettings((current) => ({ ...current, ...result.branding }));
+      if (Array.isArray(result.heroSlides)) setHeroSlides(result.heroSlides);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Failed to save settings');
+    }
   };
 
   return (
@@ -48,10 +108,51 @@ export default function SettingsPage() {
           </h1>
           <p className="text-on-surface-variant mt-1">Manage your business and application settings.</p>
         </div>
-        <button onClick={handleSave} className="flex items-center space-x-2 bg-primary text-on-primary px-6 py-2.5 rounded hover:bg-primary-fixed transition font-semibold text-sm">
+        <button disabled={isLoadingBranding} onClick={handleSave} className="flex items-center space-x-2 bg-primary text-on-primary px-6 py-2.5 rounded cursor-pointer hover:bg-primary-fixed hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/25 active:translate-y-0 active:scale-[0.98] transition-all duration-200 font-semibold text-sm disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:active:scale-100">
           <Save className="w-4 h-4" />
           <span>{saved ? '✓ Saved' : 'Save Settings'}</span>
         </button>
+      </div>
+      {saveError && (
+        <p className="mb-6 rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-300" role="alert">
+          {saveError}
+        </p>
+      )}
+
+      <div className="mb-6 bg-surface-container border border-outline-variant rounded-xl p-6 space-y-5">
+        <div>
+          <h2 className="text-xl font-bold text-cream-contrast">Homepage Hero Slider</h2>
+          <p className="mt-1 text-sm text-on-surface-variant">Create rotating hero slides with editable images, labels, headings, and descriptions.</p>
+        </div>
+        {heroSlides.map((slide, index) => (
+          <div key={slide.id} className="rounded-xl border border-outline-variant/70 bg-surface-container-low p-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-cream-contrast">Slide {index + 1}</h3>
+              {heroSlides.length > 1 && (
+                <button type="button" onClick={() => setHeroSlides(heroSlides.filter((item) => item.id !== slide.id))} className="text-xs font-semibold text-red-300 hover:text-red-200">Remove slide</button>
+              )}
+            </div>
+            <DragDropImage className="max-w-xl" value={slide.image} onChange={(image) => setHeroSlides(heroSlides.map((item) => item.id === slide.id ? { ...item, image } : item))} uploadFolder="branding" aspectRatio="wide" placeholder="Upload hero image" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {([
+                ['eyebrow', 'Small label'],
+                ['heading', 'Main heading'],
+                ['highlight', 'Highlighted heading'],
+                ['description', 'Description'],
+              ] as const).map(([key, label]) => (
+                <div key={key} className={key === 'description' ? 'md:col-span-2' : ''}>
+                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1 block">{label}</label>
+                  {key === 'description' ? (
+                    <textarea value={slide[key]} onChange={(event) => setHeroSlides(heroSlides.map((item) => item.id === slide.id ? { ...item, [key]: event.target.value } : item))} rows={3} className="w-full bg-surface-container-high text-cream-contrast py-2.5 px-4 border-b border-outline focus:border-primary focus:outline-none text-sm transition" />
+                  ) : (
+                    <input value={slide[key]} onChange={(event) => setHeroSlides(heroSlides.map((item) => item.id === slide.id ? { ...item, [key]: event.target.value } : item))} className="w-full bg-surface-container-high text-cream-contrast py-2.5 px-4 border-b border-outline focus:border-primary focus:outline-none text-sm transition" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button type="button" onClick={() => setHeroSlides([...heroSlides, { ...defaultHeroSlides[0], id: `hero-${Date.now()}`, image: '' }])} className="rounded-lg border border-primary/50 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10">+ Add slide</button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -121,16 +222,63 @@ export default function SettingsPage() {
         {/* Branding */}
         <div className="bg-surface-container border border-outline-variant rounded-xl p-6 space-y-4">
           <h3 className="text-lg font-bold text-cream-contrast flex items-center gap-2">
-            <Image className="w-5 h-5 text-primary" /> Branding
+            <ImageIcon aria-hidden="true" className="w-5 h-5 text-primary" /> Branding
           </h3>
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1 block">Logo URL</label>
-              <input value={settings.logo} onChange={(e) => updateSetting('logo', e.target.value)} className="w-full bg-surface-container-high text-cream-contrast py-2.5 px-4 border-b border-outline focus:border-primary focus:outline-none text-sm transition" />
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 block">Logo</label>
+              <DragDropImage
+                className="max-w-xs"
+                value={settings.logo}
+                onChange={(url) => updateSetting('logo', url)}
+                uploadFolder="branding"
+                aspectRatio="wide"
+                placeholder="Upload your primary logo"
+              />
             </div>
             <div>
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1 block">OG Image URL</label>
-              <input value={settings.ogImage} onChange={(e) => updateSetting('ogImage', e.target.value)} className="w-full bg-surface-container-high text-cream-contrast py-2.5 px-4 border-b border-outline focus:border-primary focus:outline-none text-sm transition" />
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 block">Social share image</label>
+              <DragDropImage
+                value={settings.ogImage}
+                onChange={(url) => updateSetting('ogImage', url)}
+                uploadFolder="branding"
+                aspectRatio="wide"
+                placeholder="Upload the Open Graph image"
+              />
+              <p className="mt-1 text-xs text-on-surface-variant">Recommended size: 1200 × 630px.</p>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2 block">Favicon</label>
+              <DragDropImage
+                value={settings.favicon}
+                onChange={(url) => updateSetting('favicon', url)}
+                uploadFolder="branding"
+                aspectRatio="square"
+                placeholder="Upload your favicon"
+              />
+              <p className="mt-1 text-xs text-on-surface-variant">Use a square PNG or ICO file, ideally 256 × 256px.</p>
+            </div>
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label htmlFor="logo-size" className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Logo size</label>
+                <span className="text-sm font-semibold text-primary">{settings.logoSizePercent}%</span>
+              </div>
+              <input
+                id="logo-size"
+                type="range"
+                min="50"
+                max="200"
+                step="5"
+                value={settings.logoSizePercent}
+                onChange={(e) => updateSetting('logoSizePercent', Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+              <div className="mt-1 flex justify-between text-xs text-on-surface-variant">
+                <span>50%</span>
+                <span>Default 100%</span>
+                <span>200%</span>
+              </div>
+              <p className="mt-2 text-xs text-on-surface-variant">Controls the displayed logo size across the public site and admin panel.</p>
             </div>
             <div>
               <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1 block">Primary Color</label>

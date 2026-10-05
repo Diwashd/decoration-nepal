@@ -72,7 +72,7 @@ export default async function QuotationsPage() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4">
         <div className="bg-surface-container border border-outline-variant rounded p-4">
           <div className="text-sm text-on-surface-variant mb-1">Total</div>
           <div className="text-3xl font-bold text-cream-contrast">{stats.total}</div>

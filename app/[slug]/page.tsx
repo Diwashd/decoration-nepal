@@ -1,8 +1,45 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import CustomerLayout from '@/components/customer/CustomerLayout';
 import { Sparkles } from 'lucide-react';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+
+  if (slug === 'events') {
+    return {
+      title: 'Events in Nepal | Weddings, Birthdays & Celebrations | 11:11 Decoration Nepal',
+      description:
+        'Discover event inspiration and planning ideas for weddings, birthdays, anniversaries, corporate events, and celebrations across Nepal.',
+      keywords: [
+        'events nepal',
+        'wedding events kathmandu',
+        'birthday events nepal',
+        'anniversary celebrations nepal',
+        'corporate events nepal',
+      ],
+      alternates: {
+        canonical: 'https://decorationnepal.com/events',
+      },
+      openGraph: {
+        title: 'Events in Nepal | 11:11 Decoration Nepal',
+        description:
+          'Plan memorable weddings, birthdays, anniversaries, and celebrations across Nepal.',
+        url: 'https://decorationnepal.com/events',
+      },
+    };
+  }
+
+  return {
+    title: `${slug
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')} | 11:11 Decoration Nepal`,
+    description: 'Professional decoration services for your special event in Nepal.',
+  };
+}
 
 export default async function DetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

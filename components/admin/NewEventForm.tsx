@@ -31,6 +31,9 @@ export default function NewEventForm({ user, quotation, coordinators, themes, co
     themeId: '',
     colorPaletteId: '',
     specialInstructions: quotation?.lead?.specialRequests || '',
+    seoTitle: '',
+    seoDescription: '',
+    seoKeywords: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,6 +85,15 @@ export default function NewEventForm({ user, quotation, coordinators, themes, co
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><label className="block text-sm font-semibold text-on-surface-variant mb-2"><Calendar className="w-4 h-4 inline mr-1" />Event Date *</label><input type="date" value={formData.eventDate} onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" required /></div>
                 <div><label className="block text-sm font-semibold text-on-surface-variant mb-2"><Users className="w-4 h-4 inline mr-1" />Guest Count</label><input type="number" value={formData.guestCount} onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" min="1" /></div>
+              </div>
+
+              <div className="bg-surface-container border border-outline-variant rounded p-6">
+                <h2 className="text-lg font-bold text-cream-contrast mb-4">SEO Settings</h2>
+                <div className="space-y-4">
+                  <div><label className="block text-sm font-semibold text-on-surface-variant mb-2">SEO Title</label><input type="text" value={formData.seoTitle} onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" placeholder={`${formData.name || 'Event'} | 11:11 Decoration Nepal`} /></div>
+                  <div><label className="block text-sm font-semibold text-on-surface-variant mb-2">SEO Description</label><textarea value={formData.seoDescription} onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" rows={3} /></div>
+                  <div><label className="block text-sm font-semibold text-on-surface-variant mb-2">SEO Keywords</label><input type="text" value={formData.seoKeywords} onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" placeholder="wedding event Nepal, event venue, celebration" /></div>
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div><label className="block text-sm font-semibold text-on-surface-variant mb-2"><Clock className="w-4 h-4 inline mr-1" />Start Time</label><input type="time" value={formData.startTime} onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} className="w-full px-4 py-2.5 bg-surface border-b border-outline focus:border-primary focus:outline-none text-on-surface transition" /></div>

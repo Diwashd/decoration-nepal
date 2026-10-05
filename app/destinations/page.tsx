@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CustomerLayout from '@/components/customer/CustomerLayout';
-import { MapPin, Star, Users, DollarSign, Phone } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, Star, Users, DollarSign, Phone, Search, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import type { AdminStoreDestination } from '@/lib/store/admin-store';
 
@@ -23,12 +23,46 @@ const typeLabels: Record<string, { label: string; emoji: string; color: string }
   hotel: { label: 'Hotel', emoji: '🏨', color: 'bg-blue-500/10 text-blue-400' },
   banquet: { label: 'Banquet Hall', emoji: '🎪', color: 'bg-purple-500/10 text-purple-400' },
   party_palace: { label: 'Party Palace', emoji: '🎉', color: 'bg-orange-500/10 text-orange-400' },
+  restaurant: { label: 'Restaurant', emoji: '🍽️', color: 'bg-green-500/10 text-green-400' },
+};
+
+const getPriceBounds = (priceRange: string) => {
+  const prices = priceRange.match(/\d[\d,]*/g)?.map(price => Number(price.replace(/,/g, ''))) ?? [];
+  return { min: prices[0] ?? 0, max: prices[prices.length - 1] ?? 0 };
+};
+
+const getMaximumGuests = (capacity: string) => {
+  const guests = capacity.match(/\d[\d,]*/g)?.map(value => Number(value.replace(/,/g, ''))) ?? [];
+  return guests[guests.length - 1] ?? 0;
 };
 
 export default function DestinationsPage() {
   const [destinations, setDestinations] = useState<AdminStoreDestination[]>(fallbackDestinations);
   const [filter, setFilter] = useState('all');
-  const [loaded, setLoaded] = useState(false);
+  const [search, setSearch] = useState('');
+  const [location, setLocation] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [guests, setGuests] = useState('');
+  const [isFeaturedPaused, setIsFeaturedPaused] = useState(false);
+  const featuredSliderRef = useRef<HTMLDivElement>(null);
+
+  const scrollFeatured = (direction: 'left' | 'right') => {
+    const slider = featuredSliderRef.current;
+    if (!slider) return;
+
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+    const nextScroll = direction === 'right'
+      ? slider.scrollLeft + slider.clientWidth
+      : slider.scrollLeft - slider.clientWidth;
+    const targetScroll = direction === 'right' && nextScroll >= maxScroll - 1
+      ? 0
+      : direction === 'left' && nextScroll <= 0
+        ? maxScroll
+        : nextScroll;
+
+    slider.scrollTo({ left: targetScroll, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     fetch('/api/destinations')
@@ -36,13 +70,43 @@ export default function DestinationsPage() {
         const result = await response.json();
         if (response.ok && result.destinations?.length) setDestinations(result.destinations);
       })
-      .finally(() => setLoaded(true));
   }, []);
 
   const activeDestinations = destinations.filter(d => d.active).sort((a, b) => (a.order ?? Number(a.id)) - (b.order ?? Number(b.id)));
-  const filtered = filter === 'all' ? activeDestinations : activeDestinations.filter(d => d.type === filter);
-  const featured = activeDestinations.filter(d => d.featured);
+  const filtered = activeDestinations.filter(destination => {
+    const price = getPriceBounds(destination.priceRange);
+    const searchText = `${destination.name} ${destination.description}`.toLowerCase();
+    const matchesSearch = !search.trim() || searchText.includes(search.trim().toLowerCase());
+    const matchesLocation = !location.trim() || destination.location.toLowerCase().includes(location.trim().toLowerCase());
+    const matchesType = filter === 'all' || destination.type === filter;
+    const matchesMinPrice = !minPrice || price.max >= Number(minPrice);
+    const matchesMaxPrice = !maxPrice || price.min <= Number(maxPrice);
+    const matchesGuests = !guests || getMaximumGuests(destination.capacity) >= Number(guests);
+
+    return matchesSearch && matchesLocation && matchesType && matchesMinPrice && matchesMaxPrice && matchesGuests;
+  });
+  const featured = filtered.filter(d => d.featured);
   const all = filtered.filter(d => !d.featured || filter !== 'all');
+  const hasActiveFilters = Boolean(search || location || minPrice || maxPrice || guests || filter !== 'all');
+
+  const clearFilters = () => {
+    setSearch('');
+    setLocation('');
+    setMinPrice('');
+    setMaxPrice('');
+    setGuests('');
+    setFilter('all');
+  };
+
+  useEffect(() => {
+    if (filter !== 'all' || featured.length < 2 || isFeaturedPaused) return;
+
+    const interval = window.setInterval(() => {
+      scrollFeatured('right');
+    }, 3000);
+
+    return () => window.clearInterval(interval);
+  }, [filter, featured.length, isFeaturedPaused]);
 
   return (
     <CustomerLayout>
@@ -59,39 +123,123 @@ export default function DestinationsPage() {
         </div>
       </section>
 
-      {/* Category Filter */}
       <section className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {[{ key: 'all', label: 'All Venues', emoji: '✨', color: '' }, ...Object.entries(typeLabels).map(([key, v]) => ({ key, ...v }))].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setFilter(tab.key)}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
-                filter === tab.key
-                  ? 'bg-primary text-on-primary shadow-lg shadow-primary/20'
-                  : 'bg-surface-container border border-outline-variant text-on-surface-variant hover:text-cream-contrast hover:border-primary/30'
-              }`}
-            >
-              <span>{tab.emoji}</span> {tab.label}
-              <span className="text-xs opacity-60">({tab.key === 'all' ? activeDestinations.length : activeDestinations.filter(d => d.type === tab.key).length})</span>
-            </button>
-          ))}
-        </div>
-      </section>
+        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+          <aside className="h-fit rounded-2xl border border-outline-variant bg-surface-container p-5 lg:sticky lg:top-24">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-semibold text-cream-contrast">
+                <SlidersHorizontal className="h-5 w-5 text-primary" aria-hidden="true" />
+                Filter Venues
+              </h2>
+              {hasActiveFilters && (
+                <button type="button" onClick={clearFilters} className="text-xs font-medium text-primary hover:underline">
+                  Clear all
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-5">
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-on-surface">Search</span>
+                <span className="relative block">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" aria-hidden="true" />
+                  <input value={search} onChange={event => setSearch(event.target.value)} placeholder="Venue name..." className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 pl-9 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary" />
+                </span>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-on-surface">Location</span>
+                <input value={location} onChange={event => setLocation(event.target.value)} placeholder="Kathmandu, Lalitpur..." className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary" />
+              </label>
+
+              <fieldset>
+                <legend className="mb-2 text-sm font-medium text-on-surface">Venue type</legend>
+                <div className="space-y-2">
+                  {[{ key: 'all', label: 'All venues' }, ...Object.entries(typeLabels).map(([key, value]) => ({ key, label: value.label }))].map(option => (
+                    <label key={option.key} className="flex cursor-pointer items-center gap-2 text-sm text-on-surface-variant">
+                      <input type="radio" name="venue-type" value={option.key} checked={filter === option.key} onChange={() => setFilter(option.key)} className="accent-primary" />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <div>
+                <span className="mb-2 block text-sm font-medium text-on-surface">Price range (Rs.)</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="number" min="0" value={minPrice} onChange={event => setMinPrice(event.target.value)} placeholder="Min" aria-label="Minimum price" className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary" />
+                  <input type="number" min="0" value={maxPrice} onChange={event => setMaxPrice(event.target.value)} placeholder="Max" aria-label="Maximum price" className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary" />
+                </div>
+              </div>
+
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-on-surface">Guests</span>
+                <input type="number" min="1" value={guests} onChange={event => setGuests(event.target.value)} placeholder="Minimum capacity" className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary" />
+              </label>
+            </div>
+          </aside>
+
+          <div className="min-w-0">
+            {filtered.length === 0 && (
+              <div className="rounded-2xl border border-dashed border-outline-variant bg-surface-container p-10 text-center">
+                <h2 className="text-lg font-semibold text-cream-contrast">No venues found</h2>
+                <p className="mt-2 text-sm text-on-surface-variant">Try adjusting your filters to see more destinations.</p>
+                <button type="button" onClick={clearFilters} className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary">
+                  Clear filters
+                </button>
+              </div>
+            )}
 
       {/* Featured Venues */}
       {featured.length > 0 && filter === 'all' && (
         <section className="py-16 max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl font-bold font-display text-cream-contrast mb-8">
-            <span className="text-primary">★</span> Featured Venues
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <h2 className="text-2xl font-bold font-display text-cream-contrast">
+              <span className="text-primary">★</span> Featured Venues
+            </h2>
+            <div className="flex shrink-0 gap-2">
+              <button
+                type="button"
+                aria-label="Previous featured venue"
+                onClick={() => scrollFeatured('left')}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next featured venue"
+                onClick={() => scrollFeatured('right')}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+          <div
+            ref={featuredSliderRef}
+            onMouseEnter={() => setIsFeaturedPaused(true)}
+            onMouseLeave={() => setIsFeaturedPaused(false)}
+            onFocus={() => setIsFeaturedPaused(true)}
+            onBlur={event => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setIsFeaturedPaused(false);
+            }}
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 scrollbar-none"
+          >
             {featured.map((dest) => (
-              <div key={dest.id} className="bg-surface-container border border-outline-variant rounded-2xl overflow-hidden hover:border-primary/30 transition-all group">
+              <div key={dest.id} className="w-[calc((100%-1.5rem)/2)] flex-none snap-start bg-surface-container border border-outline-variant rounded-2xl overflow-hidden hover:border-primary/30 transition-all group lg:w-[calc((100%-3rem)/3)]">
                 <div className="h-56 bg-surface-container-high flex items-center justify-center relative overflow-hidden">
                   {dest.image ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/45 to-transparent px-4 pb-3 pt-10">
+                        <p className="flex items-center gap-1.5 text-sm font-medium text-white">
+                          <MapPin className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                          <span className="truncate">{dest.location}</span>
+                        </p>
+                      </div>
+                    </>
                   ) : (
                     <div className="text-center z-10">
                       <MapPin className="w-12 h-12 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform" />
@@ -107,7 +255,7 @@ export default function DestinationsPage() {
                     <div>
                       <h3 className="text-lg font-bold text-cream-contrast group-hover:text-primary transition-colors">{dest.name}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${typeLabels[dest.type]?.color || 'bg-surface-container-high text-on-surface-variant'}`}>
+                        <span className={`hidden text-xs px-2 py-0.5 rounded-full md:inline-flex ${typeLabels[dest.type]?.color || 'bg-surface-container-high text-on-surface-variant'}`}>
                           {typeLabels[dest.type]?.emoji} {typeLabels[dest.type]?.label || dest.type}
                         </span>
                         <span className="flex items-center gap-1 text-xs text-yellow-400">
@@ -116,8 +264,8 @@ export default function DestinationsPage() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">{dest.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <p className="hidden text-sm text-on-surface-variant mb-4 line-clamp-2 md:block">{dest.description}</p>
+                  <div className="hidden flex-wrap gap-2 mb-4 md:flex">
                     {dest.amenities.slice(0, 5).map((a) => (
                       <span key={a} className="text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded-lg">{a}</span>
                     ))}
@@ -125,14 +273,14 @@ export default function DestinationsPage() {
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-4 text-on-surface-variant">
                       <span className="flex items-center gap-1"><Users className="w-4 h-4" /> {dest.capacity}</span>
-                      <span className="flex items-center gap-1 text-primary font-medium"><DollarSign className="w-4 h-4" /> {dest.priceRange}</span>
+                      <span className="hidden items-center gap-1 text-primary font-medium md:flex"><DollarSign className="w-4 h-4" /> {dest.priceRange}</span>
                     </div>
                   </div>
                   <div className="mt-4 flex gap-3">
                     <Link href="/planner" className="flex-1 text-center bg-primary text-on-primary py-2.5 rounded-xl font-semibold hover:bg-primary-fixed transition-colors text-sm">
                       Plan Event Here
                     </Link>
-                    <a href="tel:+9779847411305" className="flex items-center gap-1 border border-outline px-4 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors text-sm">
+                    <a href="tel:+9779847411305" className="hidden items-center gap-1 border border-outline px-4 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors text-sm md:flex">
                       <Phone className="w-4 h-4" /> Call
                     </a>
                   </div>
@@ -147,13 +295,21 @@ export default function DestinationsPage() {
       <section className={`py-16 ${featured.length > 0 ? 'bg-surface-container' : ''}`}>
         <div className="max-w-7xl mx-auto px-4">
           {featured.length > 0 && <h2 className="text-2xl font-bold font-display text-cream-contrast mb-8">All Venues</h2>}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(featured.length > 0 ? all : activeDestinations).map((dest) => (
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+            {(featured.length > 0 ? all : filtered).map((dest) => (
               <div key={dest.id} className="bg-surface border border-outline-variant rounded-2xl overflow-hidden hover:border-primary/30 transition-all group">
-                <div className="h-40 bg-surface-container-high flex items-center justify-center overflow-hidden">
+                <div className="relative h-40 bg-surface-container-high flex items-center justify-center overflow-hidden">
                   {dest.image ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/45 to-transparent px-3 pb-2.5 pt-8">
+                        <p className="flex items-center gap-1 text-xs font-medium text-white">
+                          <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
+                          <span className="truncate">{dest.location}</span>
+                        </p>
+                      </div>
+                    </>
                   ) : (
                     <MapPin className="w-10 h-10 text-primary/60 group-hover:text-primary group-hover:scale-110 transition-all" />
                   )}
@@ -167,14 +323,14 @@ export default function DestinationsPage() {
                   </div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs text-on-surface-variant flex items-center gap-1"><MapPin className="w-3 h-3" /> {dest.location}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${typeLabels[dest.type]?.color || 'bg-surface-container-high text-on-surface-variant'}`}>
+                    <span className={`hidden text-[10px] px-1.5 py-0.5 rounded-full md:inline-flex ${typeLabels[dest.type]?.color || 'bg-surface-container-high text-on-surface-variant'}`}>
                       {typeLabels[dest.type]?.emoji} {typeLabels[dest.type]?.label || dest.type}
                     </span>
                   </div>
-                  <p className="text-xs text-on-surface-variant mb-3 line-clamp-2">{dest.description}</p>
+                  <p className="hidden text-xs text-on-surface-variant mb-3 line-clamp-2 md:block">{dest.description}</p>
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-on-surface-variant flex items-center gap-1"><Users className="w-3 h-3" /> {dest.capacity}</span>
-                    <span className="text-primary font-medium">{dest.priceRange}</span>
+                    <span className="hidden text-primary font-medium md:inline">{dest.priceRange}</span>
                   </div>
                   <Link href="/planner" className="mt-3 block text-center bg-surface-container-high text-on-surface py-2 rounded-xl text-sm font-medium hover:bg-primary hover:text-on-primary transition-colors">
                     Plan Event
@@ -182,6 +338,9 @@ export default function DestinationsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
           </div>
         </div>
       </section>

@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, AlertTriangle, XCircle, Globe, FileText, Image, Search, ArrowRight, TrendingUp } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, Info, Search, ArrowRight, TrendingUp, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
 interface SeoCheck {
   id: string;
   label: string;
-  status: 'pass' | 'warning' | 'fail';
+  status: 'pass' | 'warning' | 'fail' | 'info';
   score: number;
   description: string;
   fix?: string;
@@ -16,51 +16,80 @@ interface SeoCheck {
 const defaultChecks: SeoCheck[] = [
   { id: 'meta-title', label: 'Meta Title', status: 'pass', score: 10, description: 'Root layout has a proper title template' },
   { id: 'meta-desc', label: 'Meta Description', status: 'pass', score: 10, description: 'Root layout has a comprehensive description' },
-  { id: 'og-tags', label: 'Open Graph Tags', status: 'pass', score: 10, description: 'OG tags configured for social sharing' },
+  {
+    id: 'og-tags',
+    label: 'Open Graph Tags',
+    status: 'warning',
+    score: 10,
+    description: 'Open Graph metadata is configured, but the referenced /og-image.jpg asset is missing from the public folder.',
+    fix: 'Add a 1200×630 JPG or PNG at public/og-image.jpg, then rebuild and verify the page with the Facebook Sharing Debugger or LinkedIn Post Inspector.',
+  },
   { id: 'twitter-cards', label: 'Twitter Cards', status: 'pass', score: 5, description: 'Twitter card meta tags present' },
   { id: 'robots-txt', label: 'robots.txt', status: 'pass', score: 10, description: 'robots.ts configured with proper rules' },
   { id: 'sitemap', label: 'Sitemap', status: 'pass', score: 10, description: 'sitemap.ts generates dynamic sitemap' },
-  { id: 'llms-txt', label: 'llms.txt', status: 'pass', score: 5, description: 'LLM-friendly content file available' },
-  { id: 'json-ld', label: 'JSON-LD Schema', status: 'pass', score: 10, description: 'LocalBusiness/EventPlanner schema injected' },
-  { id: 'breadcrumbs', label: 'Breadcrumbs', status: 'pass', score: 5, description: 'Breadcrumb navigation with schema on all pages' },
-  { id: 'ga', label: 'Google Analytics', status: 'warning', score: 5, description: 'GA script ready — add NEXT_PUBLIC_GA_ID to .env' },
-  { id: 'gtm', label: 'Google Tag Manager', status: 'warning', score: 3, description: 'GTM script ready — add NEXT_PUBLIC_GTM_ID to .env' },
-  { id: 'gsc', label: 'Search Console', status: 'warning', score: 2, description: 'Verification ready — add NEXT_PUBLIC_GOOGLE_VERIFICATION' },
-  { id: 'alt-text', label: 'Image Alt Text', status: 'warning', score: 5, description: 'Some images may be missing alt attributes' },
+  { id: 'llms-txt', label: 'llms.txt', status: 'info', score: 0, description: 'A public llms.txt file is optional and is not included in the core SEO health score.' },
+  { id: 'json-ld', label: 'JSON-LD Schema', status: 'pass', score: 10, description: 'JSON-LD schema is injected through the root layout.' },
+  { id: 'breadcrumbs', label: 'Breadcrumbs', status: 'pass', score: 5, description: 'Breadcrumb navigation is rendered by the shared customer layout.' },
+  { id: 'ga', label: 'Google Analytics', status: 'info', score: 0, description: 'Analytics is optional. Add NEXT_PUBLIC_GA_ID when analytics tracking is needed.' },
+  { id: 'gtm', label: 'Google Tag Manager', status: 'info', score: 0, description: 'Tag Manager is optional. Add NEXT_PUBLIC_GTM_ID when tag management is needed.' },
+  { id: 'gsc', label: 'Search Console', status: 'info', score: 0, description: 'Search Console verification is optional. Add NEXT_PUBLIC_GOOGLE_VERIFICATION when verification is available.' },
+  {
+    id: 'alt-text',
+    label: 'Image Alt Text',
+    status: 'warning',
+    score: 5,
+    description: 'This dashboard cannot reliably prove that every image has useful alternative text without scanning rendered pages.',
+    fix: 'Run the SEO audit, then add descriptive alt text to every meaningful image. Use alt="" only for decorative images.',
+  },
   { id: 'heading-hierarchy', label: 'Heading Hierarchy', status: 'pass', score: 5, description: 'Proper H1→H2→H3 structure on all pages' },
   { id: 'mobile-responsive', label: 'Mobile Responsive', status: 'pass', score: 5, description: 'All pages use responsive Tailwind classes' },
-  { id: 'page-speed', label: 'Page Speed', status: 'pass', score: 5, description: 'Using Next.js optimized images and lazy loading' },
+  {
+    id: 'page-speed',
+    label: 'Page Speed',
+    status: 'warning',
+    score: 5,
+    description: 'No Lighthouse or real-user performance measurement is stored, so this essential check is not verified.',
+    fix: 'Run Lighthouse against the production URL on mobile and desktop. Address any failing Core Web Vitals, then re-run the audit after deployment.',
+  },
 ];
 
 const statusIcons = {
   pass: CheckCircle,
   warning: AlertTriangle,
   fail: XCircle,
+  info: Info,
 };
 
 const statusColors = {
   pass: 'text-green-400',
   warning: 'text-yellow-400',
   fail: 'text-red-400',
+  info: 'text-blue-400',
 };
 
 const statusBg = {
   pass: 'bg-green-500/10',
   warning: 'bg-yellow-500/10',
   fail: 'bg-red-500/10',
+  info: 'bg-blue-500/10',
 };
 
 export default function SeoHealthWidget() {
   const [checks] = useState<SeoCheck[]>(defaultChecks);
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const totalScore = checks.reduce((sum, c) => sum + c.score, 0);
-  const maxScore = checks.reduce((sum, c) => sum + (c.status === 'pass' ? c.score : c.status === 'warning' ? Math.round(c.score * 0.5) : 0), 0);
-  const potentialMax = checks.reduce((sum, c) => sum + c.score, 0);
+  const scoredChecks = checks.filter(c => c.status !== 'info');
+  const potentialMax = scoredChecks.reduce((sum, c) => sum + c.score, 0);
+  const totalScore = checks.reduce((sum, c) => {
+    if (c.status === 'pass') return sum + c.score;
+    if (c.status === 'warning') return sum + Math.round(c.score * 0.5);
+    return sum;
+  }, 0);
   const percentage = potentialMax > 0 ? Math.min(100, Math.round((totalScore / potentialMax) * 100)) : 0;
   const passCount = checks.filter((c) => c.status === 'pass').length;
   const warnCount = checks.filter((c) => c.status === 'warning').length;
   const failCount = checks.filter((c) => c.status === 'fail').length;
+  const infoCount = checks.filter((c) => c.status === 'info').length;
 
   const getGrade = (score: number) => {
     if (score >= 90) return { label: 'A+', color: 'text-green-400' };
@@ -124,6 +153,11 @@ export default function SeoHealthWidget() {
               <span className="flex items-center gap-1 text-red-400">
                 <XCircle className="w-3 h-3" /> {failCount} failed
               </span>
+              {infoCount > 0 && (
+                <span className="flex items-center gap-1 text-blue-400">
+                  <Info className="w-3 h-3" /> {infoCount} info
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -143,18 +177,23 @@ export default function SeoHealthWidget() {
               <button
                 onClick={() => setExpanded(isExpanded ? null : check.id)}
                 className="w-full flex items-center gap-3 px-4 py-3 text-left"
+                aria-expanded={isExpanded}
+                aria-controls={`seo-check-${check.id}`}
               >
                 <Icon className={`w-4 h-4 flex-shrink-0 ${statusColors[check.status]}`} />
                 <span className="text-sm text-cream-contrast flex-1">{check.label}</span>
                 <span className={`text-xs font-semibold px-2 py-0.5 rounded ${statusBg[check.status]} ${statusColors[check.status]}`}>
-                  {check.status === 'pass' ? '✓ Pass' : check.status === 'warning' ? '⚠ Warn' : '✗ Fail'}
+                  {check.status === 'pass' ? '✓ Pass' : check.status === 'warning' ? '⚠ Warn' : check.status === 'info' ? 'Info' : '✗ Fail'}
                 </span>
+                <ChevronDown className={`w-4 h-4 text-on-surface-variant transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
               </button>
               {isExpanded && (
-                <div className="px-4 pb-3 pl-11">
+                <div id={`seo-check-${check.id}`} className="px-4 pb-3 pl-11">
                   <p className="text-xs text-on-surface-variant">{check.description}</p>
                   {check.fix && (
-                    <p className="text-xs text-primary mt-1">Fix: {check.fix}</p>
+                    <p className="text-xs text-primary mt-2">
+                      <span className="font-semibold">How to fix:</span> {check.fix}
+                    </p>
                   )}
                 </div>
               )}

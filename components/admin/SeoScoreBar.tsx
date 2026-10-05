@@ -20,86 +20,79 @@ export default function SeoScoreBar({ title, description, keywords, slug, showDe
   const analysis = useMemo(() => {
     const issues: SeoIssue[] = [];
     let score = 0;
+    const normalizedTitle = title.trim();
+    const normalizedDescription = description.trim();
+    const normalizedSlug = slug?.trim() || '';
 
     // Title checks
-    const titleLen = title.length;
+    const titleLen = normalizedTitle.length;
     if (titleLen === 0) {
       issues.push({ type: 'fail', message: 'Title is missing' });
     } else if (titleLen < 30) {
       issues.push({ type: 'warning', message: `Title is too short (${titleLen}/60)` });
-      score += 2;
+      score += 15;
     } else if (titleLen <= 60) {
       issues.push({ type: 'pass', message: `Title length is good (${titleLen}/60)` });
-      score += 10;
+      score += 30;
     } else {
       issues.push({ type: 'warning', message: `Title is too long (${titleLen}/60) — may be truncated in search results` });
-      score += 5;
+      score += 15;
     }
 
     // Description checks
-    const descLen = description.length;
+    const descLen = normalizedDescription.length;
     if (descLen === 0) {
       issues.push({ type: 'fail', message: 'Meta description is missing' });
     } else if (descLen < 120) {
       issues.push({ type: 'warning', message: `Description is short (${descLen}/160)` });
-      score += 4;
+      score += 15;
     } else if (descLen <= 160) {
       issues.push({ type: 'pass', message: `Description length is good (${descLen}/160)` });
-      score += 10;
+      score += 30;
     } else {
       issues.push({ type: 'warning', message: `Description is too long (${descLen}/160) — may be truncated` });
-      score += 5;
+      score += 15;
     }
 
-    // Keywords check
-    const keywordList = keywords.split(',').map((k) => k.trim()).filter(Boolean);
+    // Target keyword checks. Search engines do not use the keywords meta tag,
+    // but these phrases are useful for checking title and description alignment.
+    const keywordList = keywords.split(',').map((k) => k.trim().toLowerCase()).filter(Boolean);
     if (keywordList.length === 0) {
-      issues.push({ type: 'warning', message: 'No keywords defined' });
+      issues.push({ type: 'warning', message: 'No target keywords defined for relevance checks' });
     } else if (keywordList.length < 3) {
-      issues.push({ type: 'warning', message: `Only ${keywordList.length} keyword(s) — add more for better coverage` });
-      score += 3;
+      issues.push({ type: 'warning', message: `${keywordList.length} target keyword(s) defined` });
     } else {
-      issues.push({ type: 'pass', message: `${keywordList.length} keywords defined` });
-      score += 5;
+      issues.push({ type: 'pass', message: `${keywordList.length} target keywords defined` });
     }
 
-    // Title contains primary keyword
-    if (keywordList.length > 0 && title) {
-      const primaryKeyword = keywordList[0].toLowerCase();
-      if (title.toLowerCase().includes(primaryKeyword)) {
-        issues.push({ type: 'pass', message: 'Title contains primary keyword' });
-        score += 5;
-      } else {
-        issues.push({ type: 'warning', message: 'Title doesn\'t contain primary keyword' });
-        score += 2;
-      }
-    }
-
-    // Description contains keyword
-    if (keywordList.length > 0 && description) {
-      const hasKeyword = keywordList.some((k) => description.toLowerCase().includes(k.toLowerCase()));
-      if (hasKeyword) {
-        issues.push({ type: 'pass', message: 'Description contains target keywords' });
-        score += 5;
-      } else {
-        issues.push({ type: 'warning', message: 'Description doesn\'t contain any target keywords' });
-        score += 2;
-      }
+    const titleHasKeyword = keywordList.some(keyword => normalizedTitle.toLowerCase().includes(keyword));
+    const descriptionHasKeyword = keywordList.some(keyword => normalizedDescription.toLowerCase().includes(keyword));
+    if (keywordList.length > 0 && titleHasKeyword && descriptionHasKeyword) {
+      issues.push({ type: 'pass', message: 'Title and description contain target keywords' });
+      score += 20;
+    } else if (keywordList.length > 0) {
+      issues.push({ type: 'warning', message: 'Add a target keyword to both the title and description' });
+      score += 10;
+    } else {
+      issues.push({ type: 'warning', message: 'Target keyword relevance cannot be checked' });
     }
 
     // Slug check
-    if (slug) {
-      if (slug.includes('_')) {
+    if (normalizedSlug) {
+      if (normalizedSlug.includes('_')) {
         issues.push({ type: 'warning', message: 'Slug contains underscores — use hyphens instead' });
-      } else if (slug.length > 75) {
+        score += 10;
+      } else if (normalizedSlug.length > 75) {
         issues.push({ type: 'warning', message: 'Slug is very long — consider shortening' });
+        score += 10;
       } else {
         issues.push({ type: 'pass', message: 'Slug looks good' });
-        score += 3;
+        score += 20;
       }
+    } else {
+      issues.push({ type: 'fail', message: 'Slug is missing' });
     }
 
-    // Cap at 100
     score = Math.min(100, score);
 
     const passCount = issues.filter((i) => i.type === 'pass').length;

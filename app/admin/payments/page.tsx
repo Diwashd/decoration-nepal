@@ -37,6 +37,8 @@ export default function AdminPaymentsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'paid' | 'overdue'>('all');
+  const [paymentDateFrom, setPaymentDateFrom] = useState('');
+  const [paymentDateTo, setPaymentDateTo] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingInstallment, setEditingInstallment] = useState<Installment | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string>('');
@@ -54,10 +56,6 @@ export default function AdminPaymentsPage() {
     notes: '',
   });
 
-  useEffect(() => {
-    fetchInstallments();
-  }, []);
-
   const fetchInstallments = async () => {
     try {
       const response = await fetch('/api/admin/payment-installments');
@@ -71,6 +69,13 @@ export default function AdminPaymentsPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchInstallments();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // Group installments by event
   const groupedData: GroupedInstallments[] = installments.reduce((acc, inst) => {
@@ -113,7 +118,17 @@ export default function AdminPaymentsPage() {
     const matchesStatus = statusFilter === 'all' ||
       g.installments.some(i => i.status === statusFilter);
 
-    return matchesSearch && matchesStatus;
+    const matchesPaymentDate = g.installments.some((installment) => {
+      if (!installment.paymentDate) return false;
+      const paymentDate = installment.paymentDate.slice(0, 10);
+      return (
+        (paymentDateFrom === '' || paymentDate >= paymentDateFrom) &&
+        (paymentDateTo === '' || paymentDate <= paymentDateTo)
+      );
+    });
+    const hasDateFilter = paymentDateFrom !== '' || paymentDateTo !== '';
+
+    return matchesSearch && matchesStatus && (!hasDateFilter || matchesPaymentDate);
   });
 
   const totalRevenue = installments.reduce((s, i) => s + i.amount, 0);
@@ -280,29 +295,76 @@ export default function AdminPaymentsPage() {
 
         {/* Filters */}
         <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search by customer, event, or quotation..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-end">
+            <label className="block text-sm text-gray-600 md:col-span-2 xl:col-span-1">
+              <span className="block mb-1.5 font-medium">Search payments</span>
+              <span className="relative block">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Customer, event, or quotation"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="h-10 w-full pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
+                />
+              </span>
+            </label>
 
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="paid">Paid</option>
-              <option value="overdue">Overdue</option>
-            </select>
+            <label className="block text-sm text-gray-600">
+              <span className="block mb-1.5 font-medium">Payment date from</span>
+              <input
+                type="date"
+                value={paymentDateFrom}
+                max={paymentDateTo || undefined}
+                onChange={(e) => setPaymentDateFrom(e.target.value)}
+                className="h-10 w-full px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              />
+            </label>
+
+            <label className="block text-sm text-gray-600">
+              <span className="block mb-1.5 font-medium">Payment date to</span>
+              <input
+                type="date"
+                value={paymentDateTo}
+                min={paymentDateFrom || undefined}
+                onChange={(e) => setPaymentDateTo(e.target.value)}
+                className="h-10 w-full px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              />
+            </label>
+
+            <label className="block text-sm text-gray-600">
+              <span className="block mb-1.5 font-medium">Status</span>
+              <select
+                value={statusFilter}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === 'all' || value === 'pending' || value === 'paid' || value === 'overdue') {
+                    setStatusFilter(value);
+                  }
+                }}
+                className="h-10 w-full px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </label>
           </div>
+          {(paymentDateFrom || paymentDateTo) && (
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setPaymentDateFrom('');
+                  setPaymentDateTo('');
+                }}
+                className="text-sm font-medium text-blue-600 hover:text-blue-800"
+              >
+                Clear date filter
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Grouped Installments */}

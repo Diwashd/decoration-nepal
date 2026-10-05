@@ -10,7 +10,7 @@ interface DragDropImageProps {
   className?: string;
   aspectRatio?: 'video' | 'square' | 'wide';
   maxSizeMB?: number;
-  uploadFolder?: 'gallery' | 'services' | 'packages' | 'destinations' | 'blog' | 'misc';
+  uploadFolder?: 'gallery' | 'services' | 'packages' | 'destinations' | 'blog' | 'branding' | 'misc';
 }
 
 export default function DragDropImage({
@@ -117,6 +117,8 @@ export default function DragDropImage({
     onChange(url);
   };
 
+  const displayedPreview = value !== undefined ? value : preview;
+
   return (
     <div className={`space-y-2 ${className}`}>
       {/* Drop Zone */}
@@ -130,18 +132,18 @@ export default function DragDropImage({
           ${aspectClasses[aspectRatio]}
           ${isDragging
             ? 'border-primary bg-primary/10 scale-[1.02]'
-            : preview
+            : displayedPreview
               ? 'border-outline-variant hover:border-primary/50'
               : 'border-outline-variant hover:border-primary/50 bg-surface-container-high'
           }
-          ${preview ? '' : 'flex items-center justify-center'}
+          ${displayedPreview ? '' : 'flex items-center justify-center'}
         `}
       >
-        {preview ? (
+        {displayedPreview ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={preview}
+              src={displayedPreview}
               alt="Preview"
               className="w-full h-full object-cover"
             />
@@ -174,7 +176,7 @@ export default function DragDropImage({
         <span className="text-xs text-on-surface-variant">Or paste URL:</span>
         <input
           type="url"
-          value={typeof preview === 'string' && preview.startsWith('http') ? preview : ''}
+          value={typeof displayedPreview === 'string' && displayedPreview.startsWith('http') ? displayedPreview : ''}
           onChange={handleUrlInput}
           placeholder="https://example.com/image.jpg"
           className="flex-1 bg-surface-container-high border border-outline-variant rounded-lg px-3 py-1.5 text-xs text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary"
@@ -191,7 +193,7 @@ export default function DragDropImage({
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept={uploadFolder === 'branding' ? 'image/*,.ico' : 'image/*'}
         onChange={handleFileInput}
         className="hidden"
       />

@@ -1,13 +1,41 @@
-import Link from 'next/link';
-import Image from 'next/image';
+'use client';
 
-export default function CustomerNav() {
+import Link from 'next/link';
+import { useState } from 'react';
+import type { BrandingSettings } from '@/lib/settings';
+
+export default function CustomerNav({ branding }: { branding: BrandingSettings }) {
+  const logoHeight = Math.round(48 * branding.logoSizePercent / 100);
+  const navbarHeight = Math.max(80, logoHeight + 32);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
+
   return (
-    <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-xl border-b border-outline-variant/30">
-      <div className="h-20 max-w-[1280px] mx-auto px-6 lg:px-20 flex items-center justify-between gap-8">
+    <header
+      className="fixed top-0 z-50 w-full bg-background/90 backdrop-blur-xl border-b border-outline-variant/30"
+      style={{ height: `${navbarHeight}px` }}
+    >
+      <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between gap-8 px-6 py-4 lg:px-20">
         <Link href="/" className="flex items-center gap-4">
-          <span className="font-display text-primary hidden lg:block tracking-widest uppercase text-lg">Eleven 11</span>
-          <span className="font-display text-primary text-xl font-bold lg:hidden">11:11</span>
+          {!logoLoaded || logoFailed ? (
+            <span
+              className="font-display font-bold tracking-widest text-primary"
+              style={{ fontSize: `${Math.max(20, Math.round(24 * branding.logoSizePercent / 100))}px` }}
+            >
+              11:11
+            </span>
+          ) : null}
+          {branding.logo ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={branding.logo}
+              alt="11:11 Decoration Nepal"
+              onLoad={() => setLogoLoaded(true)}
+              onError={() => setLogoFailed(true)}
+              className={`h-auto max-h-full w-auto max-w-48 object-contain ${logoLoaded && !logoFailed ? '' : 'absolute h-0 w-0 opacity-0'}`}
+              style={{ height: `${logoHeight}px` }}
+            />
+          ) : null}
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">

@@ -52,6 +52,9 @@ export async function POST(request: NextRequest) {
       unit: data.unit || 'item',
       isActive: data.isActive !== false,
       sortOrder: Number(data.order) || 0,
+      seoTitle: data.seoTitle || null,
+      seoDescription: data.seoDescription || null,
+      seoKeywords: data.seoKeywords || null,
       images: [{
         category: data.category || 'core',
         icon: data.icon || '✨',
@@ -101,6 +104,9 @@ export async function PATCH(request: NextRequest) {
             order: Number(data.order) || 0,
             image: data.image || '',
           }],
+          seoTitle: data.seoTitle || null,
+          seoDescription: data.seoDescription || null,
+          seoKeywords: data.seoKeywords || null,
           updatedAt: new Date(),
         };
 

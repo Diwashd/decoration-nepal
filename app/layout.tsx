@@ -3,6 +3,8 @@ import { Playfair_Display, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import JsonLd from '@/components/seo/JsonLd';
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics';
+import CookieNotice from '@/components/privacy/CookieNotice';
+import { getBrandingSettings } from '@/lib/settings';
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -18,7 +20,7 @@ const hanken = Hanken_Grotesk({
 
 const siteUrl = 'https://decorationnepal.com';
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: {
     default: '11:11 Decoration Nepal | Luxury Event Planning & Decoration Services',
     template: '%s | 11:11 Decoration Nepal',
@@ -79,6 +81,33 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const branding = await getBrandingSettings();
+  const image = branding.ogImage;
+
+  return {
+    ...baseMetadata,
+    icons: {
+      icon: branding.favicon,
+    },
+    openGraph: {
+      ...baseMetadata.openGraph,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: '11:11 Decoration Nepal - Luxury Event Planning',
+        },
+      ],
+    },
+    twitter: {
+      ...baseMetadata.twitter,
+      images: [image],
+    },
+  };
+}
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -88,6 +117,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-surface text-on-surface">
         <GoogleAnalytics />
         <JsonLd />
+        <CookieNotice />
         {children}
       </body>
     </html>

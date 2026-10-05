@@ -1,15 +1,28 @@
 'use client';
 
 import Script from 'next/script';
+import { useEffect, useState } from 'react';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default function GoogleAnalytics() {
+  const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
+
+  useEffect(() => {
+    const readConsent = () => {
+      setAnalyticsAllowed(window.localStorage.getItem('decoration-nepal-cookie-consent') === 'accepted');
+    };
+
+    readConsent();
+    window.addEventListener('cookie-consent-change', readConsent);
+    return () => window.removeEventListener('cookie-consent-change', readConsent);
+  }, []);
+
   return (
     <>
       {/* Google Analytics */}
-      {GA_ID && (
+      {analyticsAllowed && GA_ID && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -30,7 +43,7 @@ export default function GoogleAnalytics() {
       )}
 
       {/* Google Tag Manager */}
-      {GTM_ID && (
+      {analyticsAllowed && GTM_ID && (
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -46,7 +59,7 @@ export default function GoogleAnalytics() {
 }
 
 // Event tracking helpers
-export function trackEvent(eventName: string, params?: Record<string, any>) {
+export function trackEvent(eventName: string, params?: Record<string, unknown>) {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, params);
   }
@@ -64,7 +77,7 @@ export function trackPageView(url: string, title?: string) {
 // Extend Window for gtag
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }

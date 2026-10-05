@@ -18,6 +18,9 @@ interface Package {
   images: any;
   createdAt: Date;
   updatedAt: Date;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoKeywords: string | null;
   eventType: { id: string; name: string };
 }
 
@@ -30,7 +33,7 @@ export default function EditPackageForm({ package: pkg, eventTypes }: EditPackag
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: pkg.name, eventTypeId: pkg.eventTypeId, description: pkg.description || '', basePrice: pkg.basePrice.toString(), sortOrder: String((pkg as Package & { sortOrder?: number }).sortOrder || 0), isActive: pkg.isActive, seoTitle: '', seoDescription: '', seoKeywords: '' });
+  const [formData, setFormData] = useState({ name: pkg.name, eventTypeId: pkg.eventTypeId, description: pkg.description || '', basePrice: pkg.basePrice.toString(), sortOrder: String((pkg as Package & { sortOrder?: number }).sortOrder || 0), isActive: pkg.isActive, seoTitle: pkg.seoTitle || '', seoDescription: pkg.seoDescription || '', seoKeywords: pkg.seoKeywords || '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError(null); setSuccess(null);

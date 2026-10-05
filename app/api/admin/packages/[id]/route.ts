@@ -44,6 +44,9 @@ export async function PATCH(
         basePrice: data.basePrice ?? oldPackage.basePrice,
         sortOrder: data.sortOrder ?? oldPackage.sortOrder,
         isActive: data.isActive !== undefined ? data.isActive : oldPackage.isActive,
+        seoTitle: data.seoTitle !== undefined ? data.seoTitle || null : oldPackage.seoTitle,
+        seoDescription: data.seoDescription !== undefined ? data.seoDescription || null : oldPackage.seoDescription,
+        seoKeywords: data.seoKeywords !== undefined ? data.seoKeywords || null : oldPackage.seoKeywords,
         updatedAt: new Date(),
       })
       .where(eq(packages.id, id))

@@ -6,12 +6,14 @@ import { getSession } from '@/lib/services/session';
 
 export const runtime = 'nodejs';
 
-const allowedFolders = new Set(['gallery', 'services', 'packages', 'destinations', 'blog', 'misc']);
+const allowedFolders = new Set(['gallery', 'services', 'packages', 'destinations', 'blog', 'branding', 'misc']);
 const allowedTypes = new Map([
   ['image/jpeg', '.jpg'],
   ['image/png', '.png'],
   ['image/webp', '.webp'],
   ['image/gif', '.gif'],
+  ['image/x-icon', '.ico'],
+  ['image/vnd.microsoft.icon', '.ico'],
 ]);
 
 export async function POST(request: NextRequest) {

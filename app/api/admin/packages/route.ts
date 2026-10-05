@@ -34,6 +34,9 @@ export async function POST(request: NextRequest) {
       sortOrder: Number(data.sortOrder) || 0,
       isActive: data.isActive ?? true,
       images: [],
+      seoTitle: data.seoTitle || null,
+      seoDescription: data.seoDescription || null,
+      seoKeywords: data.seoKeywords || null,
     }).returning();
 
     // Log the creation

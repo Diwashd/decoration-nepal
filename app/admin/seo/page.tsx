@@ -97,6 +97,36 @@ const defaultPages: SeoPage[] = [
     canonical: 'https://decorationnepal.com/pasni-decoration',
     noindex: false,
   },
+  {
+    id: '9',
+    slug: '/destinations',
+    title: 'Event Venues & Destinations in Nepal | 11:11 Decoration Nepal',
+    description: 'Explore verified hotels, banquet halls, party palaces, and restaurants for weddings and events in Kathmandu, Lalitpur, Pokhara, and across Nepal.',
+    keywords: 'event destinations nepal, event venues nepal, wedding venues kathmandu, banquet halls lalitpur, party palace nepal, restaurants for events',
+    ogImage: '/og-image.jpg',
+    canonical: 'https://decorationnepal.com/destinations',
+    noindex: false,
+  },
+  {
+    id: '10',
+    slug: '/packages',
+    title: 'Event Decoration Packages | 11:11 Decoration Nepal',
+    description: 'Browse event decoration package options from 11:11 Decoration Nepal and configure a custom setup for your wedding, birthday, or special event.',
+    keywords: 'event decoration packages nepal, wedding packages kathmandu, birthday decoration packages',
+    ogImage: '/og-image.jpg',
+    canonical: 'https://decorationnepal.com/packages',
+    noindex: false,
+  },
+  {
+    id: '11',
+    slug: '/events',
+    title: 'Events in Nepal | Weddings, Birthdays & Celebrations | 11:11 Decoration Nepal',
+    description: 'Discover event inspiration and planning ideas for weddings, birthdays, anniversaries, corporate events, and celebrations across Nepal.',
+    keywords: 'events nepal, wedding events kathmandu, birthday events nepal, anniversary celebrations nepal, corporate events nepal',
+    ogImage: '/og-image.jpg',
+    canonical: 'https://decorationnepal.com/events',
+    noindex: false,
+  },
 ];
 
 export default function SeoSettingsPage() {

@@ -46,6 +46,9 @@ export async function POST(request: NextRequest) {
       featured: data.featured === true,
       isActive: data.active !== false,
       sortOrder: Number(data.order) || 0,
+      seoTitle: data.seoTitle || null,
+      seoDescription: data.seoDescription || null,
+      seoKeywords: data.seoKeywords || null,
     }).returning();
     await db.insert(auditLogs).values({ userId: user.id, action: 'DESTINATION_CREATED', tableName: 'destinations', recordId: destination.id, newValue: { name: destination.name } });
     return NextResponse.json({ success: true, destination: toView(destination) });
@@ -77,6 +80,9 @@ export async function PATCH(request: NextRequest) {
       featured: data.featured ?? existing.featured,
       isActive: data.active ?? existing.isActive,
       sortOrder: data.order ?? existing.sortOrder,
+      seoTitle: data.seoTitle !== undefined ? data.seoTitle || null : existing.seoTitle,
+      seoDescription: data.seoDescription !== undefined ? data.seoDescription || null : existing.seoDescription,
+      seoKeywords: data.seoKeywords !== undefined ? data.seoKeywords || null : existing.seoKeywords,
       updatedAt: new Date(),
     }).where(eq(destinations.id, data.id)).returning();
     return NextResponse.json({ success: true, destination: toView(destination) });

@@ -54,6 +54,9 @@ export async function POST(request: NextRequest) {
         specialInstructions: data.specialInstructions || null,
         status: 'confirmed',
         coordinatorId: data.coordinatorId || null,
+        seoTitle: data.seoTitle || null,
+        seoDescription: data.seoDescription || null,
+        seoKeywords: data.seoKeywords || null,
       })
       .returning();
 

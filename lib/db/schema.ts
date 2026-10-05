@@ -72,6 +72,9 @@ export const destinations = pgTable('destinations', {
   sortOrder: integer('sort_order').notNull().default(0),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  seoTitle: varchar('seo_title', { length: 255 }),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
 });
 
 // Product Catalog
@@ -115,6 +118,9 @@ export const packages = pgTable('packages', {
   images: jsonb('images').default('[]').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  seoTitle: varchar('seo_title', { length: 255 }),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
 });
 
 export const services = pgTable('services', {
@@ -131,6 +137,9 @@ export const services = pgTable('services', {
   images: jsonb('images').default('[]').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  seoTitle: varchar('seo_title', { length: 255 }),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
 });
 
 export const packageItems = pgTable('package_items', {
@@ -248,6 +257,9 @@ export const events = pgTable('events', {
   coordinatorId: uuid('coordinator_id').references(() => users.id, { onDelete: 'set null' }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  seoTitle: varchar('seo_title', { length: 255 }),
+  seoDescription: text('seo_description'),
+  seoKeywords: text('seo_keywords'),
 });
 
 export const inventoryReservations = pgTable('inventory_reservations', {
@@ -443,6 +455,17 @@ export const packagesRelations = relations(packages, ({ one, many }) => ({
     references: [eventTypes.id],
   }),
   packageItems: many(packageItems),
+}));
+
+export const packageItemsRelations = relations(packageItems, ({ one }) => ({
+  package: one(packages, {
+    fields: [packageItems.packageId],
+    references: [packages.id],
+  }),
+  service: one(services, {
+    fields: [packageItems.serviceId],
+    references: [services.id],
+  }),
 }));
 
 export const quotationsRelations = relations(quotations, ({ one, many }) => ({

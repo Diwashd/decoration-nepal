@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Plus, Edit3, Trash2, Search, Eye, EyeOff } from 'lucide-react';
-import DragDropImage from '@/components/ui/DragDropImage';
+import Link from 'next/link';
 
 const defaultServices = [
   { id: '1', name: 'Event Decoration', category: 'core', description: 'Complete event decoration with floral arrangements, stage setup, backdrop designs, and themed decor.', price: 'From Rs. 25,000', active: true, icon: '🎨', featured: true, order: 1 },
@@ -25,11 +25,6 @@ export default function AdminServicesPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'core' | 'additional'>('all');
-  const [showModal, setShowModal] = useState(false);
-  const [editingService, setEditingService] = useState<typeof defaultServices[0] | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [form, setForm] = useState({ name: '', category: 'core', description: '', price: '', icon: '✨', featured: false, image: '', active: true, order: 0 });
 
   useEffect(() => {
     fetch('/api/admin/services')
@@ -50,55 +45,6 @@ export default function AdminServicesPage() {
       (filter === 'all' || s.category === filter) &&
       (s.name.toLowerCase().includes(search.toLowerCase()) || s.description.toLowerCase().includes(search.toLowerCase()))
   );
-
-  const openEdit = (service: typeof defaultServices[0]) => {
-    setEditingService(service);
-    setForm({ name: service.name, category: service.category, description: service.description, price: service.price, icon: service.icon, featured: service.featured, image: (service as typeof service & { image?: string }).image || '', active: service.active, order: service.order });
-    setShowModal(true);
-  };
-
-  const openNew = () => {
-    setEditingService(null);
-    setForm({ name: '', category: 'core', description: '', price: '', icon: '✨', featured: false, image: '', active: true, order: services.length + 1 });
-    setShowModal(true);
-  };
-
-  const saveService = async () => {
-    setIsSaving(true);
-    // Extract numeric value from price string (e.g., "From Rs. 15,000" -> 15000)
-    const basePrice = Number(form.price.replace(/[^0-9]/g, '')) || 0;
-    const payload = {
-      ...(editingService ? { id: editingService.id } : {}),
-      name: form.name,
-      category: form.category,
-      description: form.description,
-      basePrice,
-      icon: form.icon,
-      featured: form.featured,
-      active: form.active,
-      order: form.order,
-      image: form.image,
-    };
-    const response = await fetch('/api/admin/services', {
-      method: editingService ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const result = await response.json();
-    setIsSaving(false);
-    if (!response.ok || !result.success) {
-      setError(result.error || 'Failed to save service');
-      return;
-    }
-    if (editingService) {
-      setServices(services.map(service => service.id === editingService.id ? result.service : service));
-    } else {
-      setServices([result.service, ...services]);
-    }
-    setShowModal(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
-  };
 
   const toggleActive = async (id: string) => {
     const service = services.find(item => item.id === id);
@@ -122,20 +68,14 @@ export default function AdminServicesPage() {
   return (
     <div className="space-y-6">
       {/* Success Notification */}
-      {showSuccess && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-in slide-in-from-top-2 duration-300">
-          ✓ Service saved successfully!
-        </div>
-      )}
-
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-display text-cream-contrast">Services</h1>
           <p className="text-on-surface-variant mt-1">Manage your event services</p>
         </div>
-        <button onClick={openNew} className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-xl font-semibold hover:bg-primary/90 hover:scale-105 transition-all cursor-pointer">
+        <Link href="/admin/services/new" className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-xl font-semibold hover:bg-primary/90 hover:scale-105 transition-all cursor-pointer">
           <Plus className="w-4 h-4" /> Add Service
-        </button>
+        </Link>
       </div>
 
       {/* Filters */}
@@ -186,9 +126,9 @@ export default function AdminServicesPage() {
             <p className="text-sm text-on-surface mb-3 line-clamp-2">{service.description}</p>
             <p className="text-sm text-primary font-semibold mb-4">{service.price}</p>
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit(service)} className="flex items-center gap-1 px-3 py-1.5 bg-surface-container-high rounded-lg text-sm text-on-surface hover:text-cream-contrast hover:bg-surface-container-highest transition-all cursor-pointer">
+              <Link href={`/admin/services/${service.id}`} className="flex items-center gap-1 px-3 py-1.5 bg-surface-container-high rounded-lg text-sm text-on-surface hover:text-cream-contrast hover:bg-surface-container-highest transition-all">
                 <Edit3 className="w-3 h-3" /> Edit
-              </button>
+              </Link>
               <button onClick={() => toggleActive(service.id)} className="flex items-center gap-1 px-3 py-1.5 bg-surface-container-high rounded-lg text-sm text-on-surface hover:text-cream-contrast hover:bg-surface-container-highest transition-all cursor-pointer">
                 {service.active ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                 {service.active ? 'Active' : 'Hidden'}
@@ -201,72 +141,6 @@ export default function AdminServicesPage() {
         ))}
       </div>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-surface-container border border-outline-variant rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <h3 className="text-xl font-bold text-cream-contrast font-display">{editingService ? 'Edit Service' : 'Add Service'}</h3>
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <div className="w-20">
-                  <label className="text-xs text-on-surface-variant">Icon</label>
-                  <input value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-2xl text-center" />
-                </div>
-                <div className="flex-1">
-                  <label className="text-xs text-on-surface-variant">Name</label>
-                  <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-on-surface" placeholder="Service name" />
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <label className="text-xs text-on-surface-variant">Category</label>
-                  <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-on-surface">
-                    <option value="core">Core</option>
-                    <option value="additional">Additional</option>
-                  </select>
-                </div>
-                <div className="flex-1">
-                  <label className="text-xs text-on-surface-variant">Price</label>
-                  <input value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-on-surface" placeholder="From Rs. X" />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-on-surface-variant">Description</label>
-                <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-on-surface resize-none" placeholder="Service description..." />
-              </div>
-              <div>
-                <label className="text-xs text-on-surface-variant">Service Image</label>
-                <DragDropImage
-                  value={form.image}
-                  uploadFolder="services"
-                  onChange={(url) => setForm({ ...form, image: url })}
-                  placeholder="Drag & drop service image"
-                  aspectRatio="video"
-                  maxSizeMB={5}
-                />
-              </div>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.featured} onChange={e => setForm({ ...form, featured: e.target.checked })} className="rounded border-outline-variant" />
-                <span className="text-sm text-on-surface">Featured on homepage</span>
-              </label>
-              <div>
-                <label className="text-xs text-on-surface-variant">Display order</label>
-                <input type="number" min="0" value={form.order} onChange={e => setForm({ ...form, order: Number(e.target.value) || 0 })} className="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-on-surface" />
-              </div>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.active} onChange={e => setForm({ ...form, active: e.target.checked })} className="rounded border-outline-variant" />
-                <span className="text-sm text-on-surface">Active and visible in quotations</span>
-              </label>
-            </div>
-            <div className="flex justify-end gap-3 pt-2">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Cancel</button>
-              <button onClick={saveService} disabled={!form.name || isSaving} className="px-4 py-2 bg-primary text-on-primary rounded-xl font-semibold hover:bg-primary/90 hover:scale-105 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
-                {isSaving ? 'Saving...' : 'Save Service'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

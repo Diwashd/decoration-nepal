@@ -7,13 +7,12 @@ import AnimatedSection from '@/components/customer/AnimatedSection';
 import CustomDropdown from '@/components/ui/CustomDropdown';
 import MultiDatePicker from '@/components/ui/MultiDatePicker';
 import FeaturedDestinationsSection from '@/components/customer/FeaturedDestinationsSection';
+import HeroSlider from '@/components/customer/HeroSlider';
 
 export default function Home() {
   const [selectedEventType, setSelectedEventType] = useState('');
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [guestCount, setGuestCount] = useState('');
-
-  const heroBg = "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAD7mPCb1hYUN9bXHaMlFuL39yVLR-caNZqd8JFmj99fkshd-ba9EgjRUIXAOzRdntLA_RdL8LVZGXyaD7D5SLTlyXfVTp6FImraIFKPrFAymMfSQ-aqNlQ0XTXMgzQtvvmJ0LJMRKr6EzqCVdvWJGt_aLaKZdahYiAfiflL8cwvnNjZrGInFVcAuA_hA_-DOt4cotPTtq_-pQIZ7ihE3Cfvc0oj5nVxXLlosEmA_G9dj2Baxw3QPh-')";
 
   return (
     <CustomerLayout>
@@ -24,35 +23,7 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-1/2 h-[600px] bg-gradient-radial from-champagne-gold/5 to-transparent blur-3xl pointer-events-none"></div>
 
           <section className="relative min-h-[90vh] flex items-center justify-center -mt-20 pt-20 px-6 lg:px-20">
-            {/* Background Image */}
-            <div className="absolute inset-0 z-0" style={{ backgroundImage: heroBg }}>
-              <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background"></div>
-            </div>
-
-            <div className="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col items-center text-center gap-8 mt-20">
-              <AnimatedSection direction="fade" delay={0} immediate>
-                <div className="inline-flex items-center gap-3 bg-surface-container-low/80 backdrop-blur-md px-6 py-2 rounded-full border-[0.5px] border-primary/30 shadow-2xl">
-                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                  <span className="text-primary text-xs font-bold tracking-[0.2em] uppercase">Bespoke Events in Nepal</span>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection direction="up" delay={200} immediate>
-                <h1 className="font-display text-cream-contrast max-w-4xl tracking-tight leading-tight text-5xl md:text-7xl font-bold drop-shadow-2xl">
-                  Elevate Events with <br className="hidden md:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-champagne-gold to-muted-gold italic pr-4">
-                    Extraordinary
-                  </span>{' '}
-                  Experiences
-                </h1>
-              </AnimatedSection>
-
-              <AnimatedSection direction="up" delay={400} immediate>
-                <p className="text-on-surface-variant max-w-2xl font-light text-lg">
-                  Crafting turnkey event masterpieces with meticulous attention to luxury, exclusivity, and professional perfection.
-                </p>
-              </AnimatedSection>
-
+            <HeroSlider>
               <AnimatedSection direction="up" delay={600} immediate>
                 <div className="w-full max-w-5xl mt-8 bg-surface-container-high/90 backdrop-blur-xl p-3 md:p-4 rounded-xl border-[0.5px] border-outline-variant/50 shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1.15fr_0.8fr_auto] items-end gap-3 relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden rounded-xl"></div>
@@ -111,7 +82,7 @@ export default function Home() {
                   </Link>
                 </div>
               </AnimatedSection>
-            </div>
+            </HeroSlider>
           </section>
         </div>
 
