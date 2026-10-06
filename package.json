@@ -8,6 +8,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx lib/db/seed.ts",
+    "db:seed:catalog": "tsx -r dotenv/config lib/db/seed-catalog.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
