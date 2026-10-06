@@ -16,10 +16,21 @@ export function middleware(request: NextRequest) {
   // Check if user has admin session cookie
   const sessionCookie = request.cookies.get('admin-session');
 
-  // Validate cookie exists and looks like valid JSON
-  const isValidSession = !!sessionCookie
-    && sessionCookie.value.length > 10
-    && sessionCookie.value.startsWith('{');
+  // Validate the cookie before protected routes try to read the session.
+  let isValidSession = false;
+  if (sessionCookie?.value) {
+    try {
+      const parsed: unknown = JSON.parse(sessionCookie.value);
+      isValidSession = typeof parsed === 'object'
+        && parsed !== null
+        && typeof (parsed as { id?: unknown }).id === 'string'
+        && typeof (parsed as { name?: unknown }).name === 'string'
+        && typeof (parsed as { email?: unknown }).email === 'string'
+        && typeof (parsed as { role?: unknown }).role === 'string';
+    } catch {
+      isValidSession = false;
+    }
+  }
 
   if (!isValidSession && protectedRoutes.some(route => pathname.startsWith(route))) {
     // Clear invalid cookie if it exists

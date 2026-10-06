@@ -24,17 +24,33 @@ export async function createSession(user: AuthUser): Promise<void> {
  * Get current session user
  */
 export async function getSession(): Promise<AuthUser | null> {
-  try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
 
-    if (!sessionCookie) {
+  if (!sessionCookie?.value) {
+    return null;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(sessionCookie.value);
+
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      typeof (parsed as { id?: unknown }).id !== 'string' ||
+      typeof (parsed as { name?: unknown }).name !== 'string' ||
+      typeof (parsed as { email?: unknown }).email !== 'string' ||
+      typeof (parsed as { role?: unknown }).role !== 'string'
+    ) {
       return null;
     }
 
-    const user = JSON.parse(sessionCookie.value) as AuthUser;
-    return user;
+    return parsed as AuthUser;
   } catch (error) {
+    if (error instanceof SyntaxError) {
+      return null;
+    }
+
     console.error('Session error:', error);
     return null;
   }
