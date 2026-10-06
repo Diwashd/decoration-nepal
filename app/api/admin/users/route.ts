@@ -34,6 +34,14 @@ function toUserView(user: typeof users.$inferSelect) {
   };
 }
 
+function getDatabaseErrorCode(error: unknown) {
+  if (typeof error === 'object' && error !== null && 'code' in error) {
+    const code = (error as { code?: unknown }).code;
+    return typeof code === 'string' ? code : null;
+  }
+  return null;
+}
+
 export async function GET() {
   if (!await requireAdmin()) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   const records = await db.select().from(users).orderBy(asc(users.name));
@@ -58,8 +66,11 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ success: false, error: error.issues[0]?.message || 'Invalid user details' }, { status: 400 });
     }
-    if (error instanceof Error && error.message.toLowerCase().includes('unique')) {
+    if (getDatabaseErrorCode(error) === '23505' || (error instanceof Error && error.message.toLowerCase().includes('unique'))) {
       return NextResponse.json({ success: false, error: 'A user with this email already exists' }, { status: 409 });
+    }
+    if (getDatabaseErrorCode(error) === '42P01') {
+      return NextResponse.json({ success: false, error: 'The users table is missing. Run the database schema setup first.' }, { status: 500 });
     }
     console.error('Failed to create admin user:', error);
     return NextResponse.json({ success: false, error: 'Failed to create user' }, { status: 500 });
