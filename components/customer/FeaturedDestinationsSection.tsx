@@ -20,13 +20,15 @@ const typeConfig: Record<string, { label: string; emoji: string; color: string }
 };
 
 export default function FeaturedDestinationsSection() {
-  const [featured, setFeatured] = useState<AdminStoreDestination[]>(fallbackFeatured);
+  const [featured, setFeatured] = useState<AdminStoreDestination[]>([]);
 
   useEffect(() => {
     fetch('/api/destinations')
       .then(async response => {
         const result = await response.json();
-        if (response.ok && result.destinations?.length) setFeatured(result.destinations.filter((destination: AdminStoreDestination) => destination.featured));
+        if (response.ok && Array.isArray(result.destinations)) {
+          setFeatured(result.destinations.filter((destination: AdminStoreDestination) => destination.featured));
+        }
       });
   }, []);
 

@@ -81,12 +81,7 @@ export default async function ServicesPage() {
       features: [],
     };
   });
-  const displayServices: DisplayService[] = databaseServices.length > 0
-    ? databaseServices
-    : [
-        ...coreServices.map(service => ({ ...service, category: 'core' as const })),
-        ...additionalServices.map(service => ({ ...service, category: 'additional' as const, features: [] })),
-      ];
+  const displayServices: DisplayService[] = databaseServices;
   const displayCoreServices = displayServices.filter(service => service.category === 'core');
   const displayAdditionalServices = displayServices.filter(service => service.category === 'additional');
 

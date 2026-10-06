@@ -37,7 +37,7 @@ const getMaximumGuests = (capacity: string) => {
 };
 
 export default function DestinationsPage() {
-  const [destinations, setDestinations] = useState<AdminStoreDestination[]>(fallbackDestinations);
+  const [destinations, setDestinations] = useState<AdminStoreDestination[]>([]);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [location, setLocation] = useState('');
@@ -68,7 +68,7 @@ export default function DestinationsPage() {
     fetch('/api/destinations')
       .then(async response => {
         const result = await response.json();
-        if (response.ok && result.destinations?.length) setDestinations(result.destinations);
+        if (response.ok && Array.isArray(result.destinations)) setDestinations(result.destinations);
       })
   }, []);
 
