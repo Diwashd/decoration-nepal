@@ -49,6 +49,7 @@ export default function AdminSidebar({ user, logo, logoSizePercent, isOpen, onCl
     { name: 'Blog', href: '/admin/blog', icon: PenTool },
     { name: 'SEO', href: '/admin/seo', icon: Search },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
+    { name: 'Users', href: '/admin/users', icon: Users },
   ];
 
   return (

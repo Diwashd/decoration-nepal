@@ -16,6 +16,23 @@ const allowedTypes = new Map([
   ['image/vnd.microsoft.icon', '.ico'],
 ]);
 
+function getSupabaseStorageConfig() {
+  const url = process.env.SUPABASE_URL?.replace(/\/$/, '');
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'uploads';
+
+  if (!url && !serviceRoleKey) return null;
+  if (!url || !serviceRoleKey) {
+    throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must both be configured');
+  }
+
+  return { url, serviceRoleKey, bucket };
+}
+
+function encodeStoragePath(filePath: string) {
+  return filePath.split('/').map(encodeURIComponent).join('/');
+}
+
 export async function POST(request: NextRequest) {
   try {
     const user = await getSession();
@@ -41,10 +58,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Images must be 5MB or smaller' }, { status: 400 });
     }
 
+    const filename = `${Date.now()}-${randomUUID()}${extension}`;
+    const filePath = `${requestedFolder}/${filename}`;
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
+    const storage = getSupabaseStorageConfig();
+
+    if (storage) {
+      const encodedPath = encodeStoragePath(filePath);
+      const uploadResponse = await fetch(
+        `${storage.url}/storage/v1/object/${encodeURIComponent(storage.bucket)}/${encodedPath}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + storage.serviceRoleKey,
+            apikey: storage.serviceRoleKey,
+            'Content-Type': file.type,
+            'x-upsert': 'false',
+          },
+          body: fileBuffer,
+        },
+      );
+
+      if (!uploadResponse.ok) {
+        const details = await uploadResponse.text();
+        console.error('Supabase Storage upload failed:', uploadResponse.status, details);
+        return NextResponse.json({ success: false, error: 'Failed to save image to storage' }, { status: 502 });
+      }
+
+      return NextResponse.json({
+        success: true,
+        url: `${storage.url}/storage/v1/object/public/${encodeURIComponent(storage.bucket)}/${encodedPath}`,
+      });
+    }
+
     const folderPath = path.join(process.cwd(), 'public', 'uploads', requestedFolder);
     await mkdir(folderPath, { recursive: true });
-    const filename = `${Date.now()}-${randomUUID()}${extension}`;
-    await writeFile(path.join(folderPath, filename), Buffer.from(await file.arrayBuffer()));
+    await writeFile(path.join(folderPath, filename), fileBuffer);
 
     return NextResponse.json({ success: true, url: `/uploads/${requestedFolder}/${filename}` });
   } catch (error) {
